@@ -47,6 +47,12 @@ public class MessageController {
         return ResponseEntity.ok(dtos);
     }
 
+    @DeleteMapping("/{chatId}")
+    public ResponseEntity<Void> deleteChatMessages(@PathVariable String chatId) {
+        messageRepository.deleteByKeyChatId(chatId);
+        return ResponseEntity.noContent().build();
+    }
+
     private MessageDTO convertToDTO(Message message) {
         return MessageDTO.builder()
                 .chatId(message.getKey().getChatId())

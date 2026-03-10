@@ -44,4 +44,10 @@ public class ChatRoomController {
     public ResponseEntity<List<ChatRoom>> getUserRooms(@PathVariable String username) {
         return ResponseEntity.ok(chatRoomRepository.findByMembersContaining(username));
     }
+
+    @DeleteMapping("/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable String roomId) {
+        chatRoomRepository.deleteById(roomId);
+        return ResponseEntity.noContent().build();
+    }
 }

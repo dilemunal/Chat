@@ -215,6 +215,42 @@ class APIClient {
             completion(.success(room))
         }.resume()
     }
+
+    func deleteRoom(roomId: String, completion: ((Error?) -> Void)? = nil) {
+        // 1. Delete room record from user-service (PostgreSQL)
+        guard let roomURL = URL(string: "\(baseURL)/rooms/\(roomId)") else { return }
+        var roomRequest = URLRequest(url: roomURL)
+        roomRequest.httpMethod = "DELETE"
+        if let token = accessToken {
+            roomRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        URLSession.shared.dataTask(with: roomRequest) { [weak self] _, _, error in
+            if let error = error {
+                print("DEBUG [APIClient]: DELETE /rooms/\(roomId) failed: \(error)")
+                completion?(error)
+                return
+            }
+
+            // 2. Delete all messages for this chat from message-service (Cassandra)
+            guard let self = self,
+                  let msgsURL = URL(string: "\(self.baseURL)/messages/\(roomId)") else {
+                completion?(nil)
+                return
+            }
+            var msgsRequest = URLRequest(url: msgsURL)
+            msgsRequest.httpMethod = "DELETE"
+            if let token = self.accessToken {
+                msgsRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            URLSession.shared.dataTask(with: msgsRequest) { _, _, error in
+                if let error = error {
+                    print("DEBUG [APIClient]: DELETE /messages/\(roomId) failed: \(error)")
+                }
+                completion?(error)
+            }.resume()
+        }.resume()
+    }
     
     // Phase 5: Message Lifecycle Actions
     

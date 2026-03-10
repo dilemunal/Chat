@@ -165,16 +165,26 @@ struct ChatListView: View {
                         }
                         .frame(maxHeight: .infinity)
                     } else {
-                        ScrollView {
-                            LazyVStack(spacing: 12) {
-                                ForEach(recentChats.filter { searchText.isEmpty || ($0.name ?? "Chat").contains(searchText) }) { room in
-                                    NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.name ?? "Chat")) {
-                                        ChatRowView(room: room, currentUser: currentUser)
+                        List {
+                            ForEach(recentChats.filter { searchText.isEmpty || ($0.name ?? "Chat").contains(searchText) }) { room in
+                                NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.name ?? "Chat")) {
+                                    ChatRowView(room: room, currentUser: currentUser)
+                                }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        deleteChat(roomId: room.id)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
                                     }
                                 }
+                                .listRowSeparator(.hidden)
+                                .listRowBackground(Color.clear)
+                                .listRowInsets(EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16))
                             }
-                            .padding(.horizontal)
                         }
+                        .listStyle(.plain)
+                        .background(Color(hex: "F4F4F4"))
+                        .scrollContentBackground(.hidden)
                     }
                 }
             }
@@ -202,6 +212,15 @@ struct ChatListView: View {
                 }
             }
         }
+    }
+
+    private func deleteChat(roomId: String) {
+        // Optimistic remove from list
+        withAnimation {
+            recentChats.removeAll { $0.id == roomId }
+        }
+        // Background API deletion (room + messages)
+        APIClient.shared.deleteRoom(roomId: roomId)
     }
 }
  
@@ -1155,4 +1174,5 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
+
 

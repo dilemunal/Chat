@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface MessageRepository extends CassandraRepository<Message, Message.MessageKey> {
     List<Message> findByKeyChatId(String chatId);
+    void deleteByKeyChatId(String chatId);
 }
