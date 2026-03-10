@@ -50,6 +50,9 @@ public class Message {
     @Column("media_type")
     private String mediaType; // IMAGE, VIDEO, FILE, VOICE
 
+    @Column("local_id")
+    private String localId;
+
     @org.springframework.data.cassandra.core.mapping.PrimaryKeyClass
     @Data
     @AllArgsConstructor

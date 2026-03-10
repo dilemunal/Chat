@@ -229,10 +229,19 @@ class APIClient {
         }
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error { return completion(.failure(error)) }
-            guard let data = data, let rooms = try? JSONDecoder().decode([ChatRoom].self, from: data) else {
+            guard let data = data else {
                 return completion(.failure(NSError(domain: "Rooms", code: 500, userInfo: [NSLocalizedDescriptionKey: "Odalar alınamadı."])))
             }
-            completion(.success(rooms))
+            do {
+                let rooms = try JSONDecoder().decode([ChatRoom].self, from: data)
+                completion(.success(rooms))
+            } catch {
+                print("❌ Decoding Error in fetchRooms: \(error)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("Raw data: \(raw)")
+                }
+                completion(.failure(error))
+            }
         }.resume()
     }
 

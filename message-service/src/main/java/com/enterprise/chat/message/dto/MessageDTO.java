@@ -22,4 +22,5 @@ public class MessageDTO {
     private boolean isDeleted;
     private String mediaUrl;
     private String mediaType;
+    private String localId;
 }

@@ -34,8 +34,8 @@ class ChatViewModel: ObservableObject {
                 guard let self = self else { return }
                 // Try to find if this message is a server-confirmation of a local one
                 if let index = self.messages.firstIndex(where: {
-                    ($0.messageId == newMsg.messageId) ||
-                    ($0.messageId == nil && $0.content == newMsg.content && $0.senderId == newMsg.senderId)
+                    ($0.messageId != nil && $0.messageId == newMsg.messageId) ||
+                    ($0.localId != nil && $0.localId == newMsg.localId)
                 }) {
                     self.messages[index] = newMsg
                 } else {
@@ -57,14 +57,18 @@ class ChatViewModel: ObservableObject {
         guard !content.isEmpty else { return }
         
         // Optimistic UI Update
-        let localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content, replyToId: replyToId)
+        var localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content, replyToId: replyToId)
+        localMsg.timestamp = Date().timeIntervalSince1970 * 1000
         self.messages.append(localMsg)
         
         // Clear input
         self.inputText = ""
         
         // Real Send
-        WebSocketManager.shared.sendMessage(chatId: chatId, senderId: senderId, content: content)
+        var msg = ChatMessage(chatId: chatId, senderId: senderId, content: content, replyToId: replyToId)
+        msg.localId = localMsg.id
+        msg.timestamp = localMsg.timestamp
+        WebSocketManager.shared.sendMessage(message: msg)
     }
     
     func editMessage(chatId: String, messageId: String, newContent: String) {
@@ -104,13 +108,35 @@ class ChatViewModel: ObservableObject {
     }
     
     func uploadAndSendMedia(chatId: String, senderId: String, image: UIImage) {
+        let tempId = UUID().uuidString
+        // Optimistic UI: Adding a local message with a placeholder or just marking it as uploading
+        var localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "[Uploading Image...]", mediaType: "IMAGE")
+        localMsg.id = tempId
+        localMsg.localId = tempId
+        localMsg.timestamp = Date().timeIntervalSince1970 * 1000
+        
+        DispatchQueue.main.async {
+            self.messages.append(localMsg)
+        }
+        
         guard let data = image.jpegData(compressionQuality: 0.7) else { return }
-        APIClient.shared.uploadMedia(data: data, fileName: "image.jpg", contentType: "image/jpeg") { result in
-            if case .success(let url) = result {
-                let mediaMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "[Image]", mediaUrl: url, mediaType: "IMAGE")
-                APIClient.shared.sendMessage(message: mediaMsg) { _ in }
+        APIClient.shared.uploadMedia(data: data, fileName: "\(tempId).jpg", contentType: "image/jpeg") { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let url):
+                    // Remove optimistic message and send the real one
+                    self?.messages.removeAll(where: { $0.id == tempId })
+                    
+                    // Create and send the final message via WebSocket for real-time delivery
+                    var finalMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "[Image]", mediaUrl: url, mediaType: "IMAGE")
+                    finalMsg.localId = tempId
+                    finalMsg.timestamp = Date().timeIntervalSince1970 * 1000
+                    WebSocketManager.shared.sendMessage(message: finalMsg)
+                case .failure(let error):
+                    print("❌ Media upload failed: \(error.localizedDescription)")
+                    self?.messages.removeAll(where: { $0.id == tempId })
+                }
             }
         }
     }
 }
-

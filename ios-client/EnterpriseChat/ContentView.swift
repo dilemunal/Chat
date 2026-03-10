@@ -118,9 +118,9 @@ struct ChatListView: View {
     }
 
     private var filteredChats: [ChatRoom] {
-        sortedChats.filter { 
-            searchText.isEmpty || 
-            ($0.name ?? "Chat").localizedCaseInsensitiveContains(searchText) 
+        sortedChats.filter {
+            searchText.isEmpty ||
+            ($0.name ?? "Chat").localizedCaseInsensitiveContains(searchText)
         }
     }
 
@@ -131,7 +131,7 @@ struct ChatListView: View {
                 
                 // GİZLİ NAVİGASYON TETİKLEYİCİSİ
                 NavigationLink(
-                    destination: ChatRoomView(currentUser: currentUser, chatId: targetNewRoom?.id ?? "", title: targetNewRoom?.name ?? "Chat"),
+                    destination: ChatRoomView(currentUser: currentUser, chatId: targetNewRoom?.id ?? "", title: targetNewRoom?.displayName(currentUser: currentUser) ?? "Chat"),
                     isActive: $navigateToNewRoom,
                     label: { EmptyView() }
                 )
@@ -194,7 +194,7 @@ struct ChatListView: View {
                                         Text("No matching chats").font(.system(size: 13)).foregroundColor(.gray)
                                     } else {
                                         ForEach(filteredChats) { room in
-                                            NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.name ?? "Chat")) {
+                                            NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.displayName(currentUser: currentUser))) {
                                                 ChatRowView(room: room, currentUser: currentUser)
                                             }
                                             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -241,7 +241,7 @@ struct ChatListView: View {
                             } else {
                                 // Default recent chats view
                                 ForEach(sortedChats) { room in
-                                    NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.name ?? "Chat")) {
+                                    NavigationLink(destination: ChatRoomView(currentUser: currentUser, chatId: room.id, title: room.displayName(currentUser: currentUser))) {
                                         ChatRowView(room: room, currentUser: currentUser)
                                     }
                                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -338,13 +338,7 @@ struct ChatRowView: View {
     let currentUser: User
     
     private var displayName: String {
-        if room.group {
-            return room.name ?? "Group Chat"
-        } else {
-            // Derive name for 1:1 chat from the other member
-            let otherMember = room.members.first(where: { $0 != currentUser.username })
-            return otherMember ?? "Chat"
-        }
+        room.displayName(currentUser: currentUser)
     }
     
     var body: some View {
@@ -741,7 +735,7 @@ struct ChatRoomView: View {
                 let sortedDates = grouped.keys.sorted()
                 
                 ForEach(sortedDates, id: \.self) { date in
-                    Section(header: 
+                    Section(header:
                         HStack {
                             Spacer()
                             Text(formatHeaderDate(date))
@@ -856,6 +850,24 @@ struct ChatRoomView: View {
             .background(Color.white)
         }
     }
+
+    private func groupMessagesByDate(_ messages: [ChatMessage]) -> [Date: [ChatMessage]] {
+        Dictionary(grouping: messages) { msg in
+            let timestamp = msg.timestamp ?? Date().timeIntervalSince1970 * 1000
+            let date = Date(timeIntervalSince1970: timestamp / 1000)
+            return Calendar.current.startOfDay(for: date)
+        }
+    }
+
+    private func formatHeaderDate(_ date: Date) -> String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(date) { return "Today" }
+        if calendar.isDateInYesterday(date) { return "Yesterday" }
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMMM d, yyyy"
+        return formatter.string(from: date)
+    }
 }
 
 struct EmojiPanelView: View {
@@ -915,25 +927,84 @@ struct DribbbleMessageRow: View {
                     .cornerRadius(4)
                 }
                 
-                if let mediaUrl = message.mediaUrl, let url = URL(string: mediaUrl) {
-                    AsyncImage(url: url) { image in
-                        image.resizable().aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        ProgressView()
+                // Image Content
+                if let url = resolveMediaURL(message.mediaUrl) {
+                    ZStack(alignment: .bottomTrailing) {
+                        AsyncImage(url: url) { image in
+                            image.resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ZStack {
+                                Color.gray.opacity(0.1)
+                                ProgressView()
+                            }
+                        }
+                        .frame(maxWidth: 240)
+                        .frame(minHeight: 100, maxHeight: 350)
+                        .background(Color.gray.opacity(0.05))
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        
+                        // Metadata Overlay (if no text content)
+                        if message.content == "[Image]" || message.content.isEmpty {
+                            HStack(spacing: 4) {
+                                Text(formatTime(message.timestamp))
+                                    .font(.system(size: 8))
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 4)
+                                    .padding(.vertical, 2)
+                                    .background(Color.black.opacity(0.4))
+                                    .cornerRadius(4)
+                                
+                                if isMe {
+                                    MessageStatusView(status: message.status ?? "SENT")
+                                        .colorInvert()
+                                        .brightness(1)
+                                }
+                            }
+                            .padding(10)
+                        }
                     }
-                    .frame(maxWidth: 200)
-                    .cornerRadius(12)
-                    .padding(.horizontal, 8)
+                    .padding(.horizontal, 4)
+                } else if message.mediaType == "IMAGE" || message.content == "[Uploading Image...]" {
+                    // Optimistic Loading State
+                    ZStack(alignment: .bottomTrailing) {
+                        ZStack {
+                            Color.gray.opacity(0.1)
+                            VStack(spacing: 8) {
+                                ProgressView()
+                                Text("Uploading...").font(.system(size: 10)).foregroundColor(.gray)
+                            }
+                        }
+                        .frame(width: 200, height: 150)
+                        .cornerRadius(18)
+                        
+                        // Metadata for optimistic state
+                        HStack(spacing: 4) {
+                            Text(formatTime(Date().timeIntervalSince1970 * 1000))
+                                .font(.system(size: 8))
+                                .foregroundColor(.gray)
+                            if isMe {
+                                Image(systemName: "clock").font(.system(size: 8)).foregroundColor(.gray)
+                            }
+                        }
+                        .padding(8)
+                    }
+                    .padding(.horizontal, 4)
                 }
                 
-                if !message.content.isEmpty && message.content != "[Image]" {
+                // Text Content
+                let showText = !message.content.isEmpty &&
+                              message.content != "[Image]" &&
+                              message.content != "[Uploading Image...]"
+                
+                if showText {
                     ZStack(alignment: .bottomTrailing) {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(message.isDeleted == true ? "This message was deleted" : message.content)
                                 .font(.system(size: 14, design: .rounded))
                                 .italic(message.isDeleted == true)
-                                .foregroundColor(message.isDeleted == true ? .gray : .black)
-                                .padding(.bottom, 12) // Ensure space for timestamp at the bottom right
+                                .foregroundColor(message.isDeleted == true ? .gray : (isMe ? .black : .black))
+                                .padding(.bottom, 12)
                         }
                         .padding(.horizontal, 12)
                         .padding(.top, 8)
@@ -986,6 +1057,15 @@ struct DribbbleMessageRow: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: date)
+    }
+    
+    private func resolveMediaURL(_ urlString: String?) -> URL? {
+        guard let urlString = urlString, !urlString.isEmpty else { return nil }
+        if urlString.hasPrefix("http") {
+            return URL(string: urlString)
+        }
+        // Fallback for relative URLs from API Gateway
+        return URL(string: "http://localhost:9090/api/v1" + (urlString.hasPrefix("/") ? "" : "/") + urlString)
     }
 }
 

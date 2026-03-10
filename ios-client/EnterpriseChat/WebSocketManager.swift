@@ -53,9 +53,8 @@ class WebSocketManager: ObservableObject {
         sendRaw(sendFrame)
     }
     
-    func sendMessage(chatId: String, senderId: String, content: String) {
-        let msg = ChatMessage(chatId: chatId, senderId: senderId, content: content)
-        guard let jsonData = try? JSONEncoder().encode(msg),
+    func sendMessage(message: ChatMessage) {
+        guard let jsonData = try? JSONEncoder().encode(message),
               let jsonString = String(data: jsonData, encoding: .utf8) else { return }
         
         let sendFrame = "SEND\ndestination:/app/chat.send\ncontent-type:application/json\n\n\(jsonString)\0"

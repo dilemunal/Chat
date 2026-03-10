@@ -35,6 +35,9 @@ public class MessageConsumer {
                 .content(chatMessageDTO.getContent())
                 .timestamp(Instant.ofEpochMilli(chatMessageDTO.getTimestamp()))
                 .status("SENT")
+                .mediaUrl(chatMessageDTO.getMediaUrl())
+                .mediaType(chatMessageDTO.getMediaType())
+                .localId(chatMessageDTO.getLocalId())
                 .build();
         
         messageRepository.save(message);
@@ -50,5 +53,8 @@ public class MessageConsumer {
         private String senderId;
         private String content;
         private long timestamp;
+        private String mediaUrl;
+        private String mediaType;
+        private String localId;
     }
 }

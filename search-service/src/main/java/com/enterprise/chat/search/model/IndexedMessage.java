@@ -30,4 +30,13 @@ public class IndexedMessage {
 
     @Field(type = FieldType.Date)
     private long timestamp;
+
+    @Field(type = FieldType.Keyword)
+    private String mediaUrl;
+
+    @Field(type = FieldType.Keyword)
+    private String mediaType;
+
+    @Field(type = FieldType.Keyword)
+    private String localId;
 }

@@ -43,6 +43,9 @@ public class MessageIndexerService {
                     .senderId(payload.getOrDefault("senderId", "").toString())
                     .content(payload.getOrDefault("content", "").toString())
                     .timestamp(timestamp)
+                    .mediaUrl(payload.getOrDefault("mediaUrl", "").toString())
+                    .mediaType(payload.getOrDefault("mediaType", "").toString())
+                    .localId(payload.getOrDefault("localId", "").toString())
                     .build();
 
             searchRepository.save(indexedMessage);

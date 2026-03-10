@@ -65,6 +65,7 @@ public class MessageController {
                 .isDeleted(message.isDeleted())
                 .mediaUrl(message.getMediaUrl())
                 .mediaType(message.getMediaType())
+                .localId(message.getLocalId())
                 .build();
     }
 }
