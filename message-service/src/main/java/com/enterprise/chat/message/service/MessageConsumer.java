@@ -28,10 +28,12 @@ public class MessageConsumer {
         log.info("Mapping mediaUrl={}, mediaType={}, localId={}", 
             chatMessageDTO.getMediaUrl(), chatMessageDTO.getMediaType(), chatMessageDTO.getLocalId());
         
+        UUID messageId = chatMessageDTO.getMessageId() != null ? chatMessageDTO.getMessageId() : UUID.randomUUID();
+        
         Message message = Message.builder()
                 .key(Message.MessageKey.builder()
                         .chatId(chatMessageDTO.getChatId())
-                        .messageId(UUID.randomUUID())
+                        .messageId(messageId)
                         .build())
                 .senderId(chatMessageDTO.getSenderId())
                 .content(chatMessageDTO.getContent())
@@ -40,6 +42,9 @@ public class MessageConsumer {
                 .mediaUrl(chatMessageDTO.getMediaUrl())
                 .mediaType(chatMessageDTO.getMediaType())
                 .localId(chatMessageDTO.getLocalId())
+                .replyToId(chatMessageDTO.getReplyToId() != null ? UUID.fromString(chatMessageDTO.getReplyToId()) : null)
+                .isEdited(chatMessageDTO.isEdited())
+                .isDeleted(chatMessageDTO.isDeleted())
                 .build();
         
         messageRepository.save(message);
@@ -59,5 +64,9 @@ public class MessageConsumer {
         private String mediaUrl;
         private String mediaType;
         private String localId;
+        private UUID messageId;
+        private String replyToId;
+        private boolean isEdited;
+        private boolean isDeleted;
     }
 }

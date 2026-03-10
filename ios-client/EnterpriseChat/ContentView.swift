@@ -116,14 +116,14 @@ struct ChatListView: View {
                 return r1 > r2 // ISO8601 strings sort correctly lexicographically
             }
     }
-
+    
     private var filteredChats: [ChatRoom] {
         sortedChats.filter {
             searchText.isEmpty ||
             ($0.name ?? "Chat").localizedCaseInsensitiveContains(searchText)
         }
     }
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -158,7 +158,7 @@ struct ChatListView: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, 10)
-
+                    
                     HStack {
                         Image(systemName: "magnifyingglass.circle.fill")
                             .foregroundColor(searchText.isEmpty ? .gray : .blue)
@@ -286,7 +286,7 @@ struct ChatListView: View {
             }
         }
     }
-
+    
     private func deleteChat(roomId: String) {
         withAnimation { recentChats.removeAll { $0.id == roomId } }
         APIClient.shared.deleteRoom(roomId: roomId)
@@ -331,8 +331,8 @@ struct ChatListView: View {
         return formatter.string(from: date)
     }
 }
- 
-   
+
+
 struct ChatRowView: View {
     let room: ChatRoom
     let currentUser: User
@@ -419,7 +419,7 @@ struct ContactListView: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, 10)
-
+                    
                     HStack {
                         Image(systemName: "magnifyingglass").foregroundColor(.gray).font(.system(size: 14))
                         TextField("Search names...", text: $searchText)
@@ -431,11 +431,11 @@ struct ContactListView: View {
                     .cornerRadius(18)
                     .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.glassBorder, lineWidth: 1))
                     .padding(.horizontal)
-
+                    
                     if isLoading {
                         ProgressView().padding()
                     }
-
+                    
                     ScrollView {
                         LazyVStack(spacing: 12) {
                             ForEach(users.filter { $0.username != currentUser.username && (searchText.isEmpty || ($0.username).contains(searchText)) }) { user in
@@ -568,7 +568,7 @@ struct MultiContactSelectionView: View {
                         .foregroundColor(.gray)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
-
+                    
                     ScrollView {
                         LazyVStack(spacing: 8) {
                             ForEach(users.filter { $0.username != currentUser.username }) { user in
@@ -753,19 +753,19 @@ struct ChatRoomView: View {
                 
                 ForEach(sortedDates, id: \.self) { date in
                     Section(header:
-                        HStack {
-                            Spacer()
-                            Text(formatHeaderDate(date))
-                                .font(.system(size: 11, weight: .bold))
-                                .padding(.vertical, 4)
-                                .padding(.horizontal, 14)
-                                .background(Color.white.opacity(0.5))
-                                .background(.ultraThinMaterial)
-                                .cornerRadius(12)
-                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.glassBorder, lineWidth: 1))
-                                .shadow(color: .black.opacity(0.02), radius: 2)
-                            Spacer()
-                        }
+                                HStack {
+                        Spacer()
+                        Text(formatHeaderDate(date))
+                            .font(.system(size: 11, weight: .bold))
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 14)
+                            .background(Color.white.opacity(0.5))
+                            .background(.ultraThinMaterial)
+                            .cornerRadius(12)
+                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.glassBorder, lineWidth: 1))
+                            .shadow(color: .black.opacity(0.02), radius: 2)
+                        Spacer()
+                    }
                         .padding(.vertical, 8)
                     ) {
                         
@@ -774,22 +774,20 @@ struct ChatRoomView: View {
                                 audioManager: audioManager,
                                 message: msg,
                                 isMe: msg.senderId == currentUser.username,
-                                repliedContent: viewModel.messages.first(where: { $0.id == msg.replyToId })?.content,
+                                repliedContent: viewModel.messages.first(where: { $0.messageId == msg.replyToId || $0.id == msg.replyToId })?.content,
                                 onEdit: {
                                     viewModel.inputText = msg.content
-                                    editingMessageId = msg.messageId
+                                    editingMessageId = msg.messageId ?? msg.id
                                 },
                                 onRevoke: {
-                                    if let mid = msg.messageId {
-                                        viewModel.revokeMessage(chatId: chatId, messageId: mid)
-                                    }
+                                    viewModel.revokeMessage(chatId: chatId, messageId: msg.messageId ?? msg.id)
                                 },
                                 onReply: {
-                                    replyingToId = msg.messageId
+                                    replyingToId = msg.messageId ?? msg.id
                                 },
                                 onQuoteTap: {
                                     if let replyId = msg.replyToId,
-                                       let targetMsg = viewModel.messages.first(where: { $0.messageId == replyId }) {
+                                       let targetMsg = viewModel.messages.first(where: { $0.messageId == replyId || $0.id == replyId }) {
                                         withAnimation { proxy.scrollTo(targetMsg.id, anchor: .center) }
                                     }
                                 }
@@ -818,22 +816,71 @@ struct ChatRoomView: View {
     
     private var inputView: some View {
         VStack(spacing: 0) {
-            if let replyId = replyingToId, let replyMsg = viewModel.messages.first(where: { $0.messageId == replyId }) {
+            if let replyId = replyingToId, let replyMsg = viewModel.messages.first(where: { $0.messageId == replyId || $0.id == replyId }) {
                 HStack {
+                    Rectangle().fill(Color.slateBlue).frame(width: 3)
+                    
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Replying to").font(.caption2).foregroundColor(.gray)
-                        Text(replyMsg.content).font(.caption).lineLimit(1).foregroundColor(Color(hex: "4A4A8F"))
+                        Text("Replying to \(replyMsg.senderId == currentUser.username ? "yourself" : replyMsg.senderId)")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(Color.slateBlue)
+                        
+                        Text(replyMsg.content)
+                            .font(.system(size: 13, design: .rounded))
+                            .lineLimit(1)
+                            .foregroundColor(Color.charcoal.opacity(0.8))
                     }
                     .padding(.leading, 8)
-                    .overlay(HStack { Rectangle().fill(Color(hex: "D1D1FF")).frame(width: 2); Spacer() })
+                    
                     Spacer()
+                    
                     Button(action: { replyingToId = nil }) {
-                        Image(systemName: "xmark.circle.fill").foregroundColor(.gray)
+                        Image(systemName: "xmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(Color.charcoal.opacity(0.5))
+                            .padding(8)
+                            .background(Color.white.opacity(0.5))
+                            .clipShape(Circle())
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(Color(hex: "F8F8FF"))
+                .background(.ultraThinMaterial)
+                .overlay(Rectangle().frame(width: nil, height: 1, alignment: .bottom).foregroundColor(Color.glassBorder), alignment: .bottom)
+            } else if let editId = editingMessageId, let editMsg = viewModel.messages.first(where: { $0.messageId == editId || $0.id == editId }) {
+                HStack {
+                    Rectangle().fill(Color.softSage).frame(width: 3)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Editing Message")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(Color.softSage)
+                        
+                        Text(editMsg.content)
+                            .font(.system(size: 13, design: .rounded))
+                            .lineLimit(1)
+                            .foregroundColor(Color.charcoal.opacity(0.8))
+                    }
+                    .padding(.leading, 8)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        editingMessageId = nil
+                        viewModel.inputText = ""
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(Color.charcoal.opacity(0.5))
+                            .padding(8)
+                            .background(Color.white.opacity(0.5))
+                            .clipShape(Circle())
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(.ultraThinMaterial)
+                .overlay(Rectangle().frame(width: nil, height: 1, alignment: .bottom).foregroundColor(Color.glassBorder), alignment: .bottom)
             }
             
             HStack(spacing: 12) {
@@ -888,7 +935,7 @@ struct ChatRoomView: View {
                             replyingToId = nil
                         }
                     }) {
-                        Image(systemName: editingMessageId != nil ? "pencil.circle.fill" : "paperplane.fill")
+                        Image(systemName: editingMessageId != nil ? "checkmark.circle.fill" : "paperplane.fill")
                             .foregroundColor(.white)
                             .padding(14)
                             .background(Color.softSage)
@@ -903,15 +950,15 @@ struct ChatRoomView: View {
             .shadow(color: Color.black.opacity(0.03), radius: 10, x: 0, y: -5)
         }
     }
-
+    
     private func groupMessagesByDate(_ messages: [ChatMessage]) -> [Date: [ChatMessage]] {
-        Dictionary(grouping: messages) { msg in
+        Dictionary(grouping: messages.filter { $0.isDeleted != true }) { msg in
             let timestamp = msg.timestamp ?? Date().timeIntervalSince1970 * 1000
             let date = Date(timeIntervalSince1970: timestamp / 1000)
             return Calendar.current.startOfDay(for: date)
         }
     }
-
+    
     private func formatHeaderDate(_ date: Date) -> String {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) { return "Today" }
@@ -985,6 +1032,7 @@ struct DribbbleMessageRow: View {
                         .cornerRadius(6)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .padding(isMe ? .trailing : .leading, 12)
                 }
                 
                 // Image Content
@@ -1050,90 +1098,101 @@ struct DribbbleMessageRow: View {
                         .padding(8)
                     }
                     .padding(.horizontal, 4)
-                }
-                
                 } else if message.mediaType == "AUDIO" {
                     let audioUrl = resolveMediaURL(message.mediaUrl)?.absoluteString ?? ""
-                    let isPlayingThis = audioManager.isPlaying(url: audioUrl)
-                    let isPlaceholder = message.content == "[Uploading Audio...]"
+                let isPlayingThis = audioManager.isPlaying(url: audioUrl)
+                let isPlaceholder = message.content == "[Uploading Audio...]"
+                
+                HStack(spacing: 12) {
+                    Button(action: {
+                        if !isPlaceholder {
+                            if isPlayingThis { audioManager.stopAudio() }
+                            else { audioManager.playAudio(urlString: audioUrl) }
+                        }
+                    }) {
+                        if isPlaceholder {
+                            ProgressView().progressViewStyle(CircularProgressViewStyle(tint: isMe ? .white : .gray))
+                                .frame(width: 40, height: 40)
+                                .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
+                                .clipShape(Circle())
+                        } else {
+                            Image(systemName: isPlayingThis ? "pause.fill" : "play.fill")
+                                .foregroundColor(isMe ? .white : Color.softSage)
+                                .font(.system(size: 20))
+                                .frame(width: 40, height: 40)
+                                .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
+                                .clipShape(Circle())
+                                .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                        }
+                    }
                     
-                    HStack(spacing: 12) {
-                        Button(action: {
-                            if !isPlaceholder {
-                                if isPlayingThis { audioManager.stopAudio() }
-                                else { audioManager.playAudio(urlString: audioUrl) }
-                            }
-                        }) {
-                            if isPlaceholder {
-                                ProgressView().progressViewStyle(CircularProgressViewStyle(tint: isMe ? .white : .gray))
-                                    .frame(width: 40, height: 40)
-                                    .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
-                                    .clipShape(Circle())
-                            } else {
-                                Image(systemName: isPlayingThis ? "pause.fill" : "play.fill")
-                                    .foregroundColor(isMe ? .white : Color.softSage)
-                                    .font(.system(size: 20))
-                                    .frame(width: 40, height: 40)
-                                    .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
-                                    .clipShape(Circle())
-                                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
-                            }
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(isMe ? Color.white.opacity(0.3) : Color.gray.opacity(0.2))
+                                .frame(height: 4)
+                            Capsule()
+                                .fill(isMe ? Color.white : Color.softSage)
+                                .frame(width: isPlayingThis ? geo.size.width * CGFloat(audioManager.progress) : 0, height: 4)
+                                .animation(.linear(duration: 0.1), value: audioManager.progress)
                         }
-                        
-                        GeometryReader { geo in
-                            ZStack(alignment: .leading) {
-                                Capsule()
-                                    .fill(isMe ? Color.white.opacity(0.3) : Color.gray.opacity(0.2))
-                                    .frame(height: 4)
-                                Capsule()
-                                    .fill(isMe ? Color.white : Color.softSage)
-                                    .frame(width: isPlayingThis ? geo.size.width * CGFloat(audioManager.progress) : 0, height: 4)
-                                    .animation(.linear(duration: 0.1), value: audioManager.progress)
+                        .frame(height: 40) // For vertical centering inside HStack
+                    }
+                    .frame(width: 100)
+                    
+                    VStack(alignment: .trailing, spacing: 2) {
+                        HStack(spacing: 4) {
+                            if message.isEdited == true {
+                                Text("(edited)")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(isMe ? .white.opacity(0.8) : .gray)
                             }
-                            .frame(height: 40) // For vertical centering inside HStack
-                        }
-                        .frame(width: 100)
-                        
-                        VStack(alignment: .trailing, spacing: 2) {
                             Text(formatTime(message.timestamp))
                                 .font(.system(size: 9))
                                 .foregroundColor(isMe ? .white.opacity(0.8) : .gray)
-                            if isMe && message.isDeleted != true {
-                                MessageStatusView(status: message.status ?? "SENT")
-                                    .colorInvert()
-                                    .brightness(isMe ? 1 : 0)
-                                    .scaleEffect(0.8)
-                            }
+                        }
+                        if isMe && message.isDeleted != true {
+                            MessageStatusView(status: message.status ?? "SENT")
+                                .colorInvert()
+                                .brightness(isMe ? 1 : 0)
+                                .scaleEffect(0.8)
                         }
                     }
-                    .padding(.horizontal, 10).padding(.vertical, 8)
-                    .background(isMe ? Color.softSage : Color.white.opacity(0.6))
-                    .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
-                    .cornerRadius(25)
-                    .overlay(RoundedRectangle(cornerRadius: 25).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
-                    .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
                 }
-                
-                // Text Content
-                let showText = !message.content.isEmpty &&
-                              message.content != "[Image]" &&
-                              message.content != "[Uploading Image...]" &&
-                              message.mediaType != "AUDIO"
-                
-                if showText {
-                    ZStack(alignment: .bottomTrailing) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(message.isDeleted == true ? "This message was deleted" : message.content)
-                                .font(.system(size: 14, design: .rounded))
-                                .italic(message.isDeleted == true)
-                                .foregroundColor(message.isDeleted == true ? .gray : (isMe ? .black : .black))
-                                .padding(.bottom, 12)
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.top, 8)
-                        .padding(.bottom, 2)
-                        
-                        HStack(spacing: 4) {
+                .padding(.horizontal, 10).padding(.vertical, 8)
+                .background(isMe ? Color.softSage : Color.white.opacity(0.6))
+                .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
+                .cornerRadius(25)
+                .overlay(RoundedRectangle(cornerRadius: 25).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
+                .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
+            }
+            
+            // Text Content
+            let showText = !message.content.isEmpty &&
+            message.content != "[Image]" &&
+            message.content != "[Uploading Image...]" &&
+            message.mediaType != "AUDIO"
+            
+            if showText {
+                ZStack(alignment: .bottomTrailing) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(message.content)
+                            .font(.system(size: 14, design: .rounded))
+                            .foregroundColor(isMe ? .black : .black)
+                            .padding(.bottom, 12)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.top, 8)
+                    .padding(.bottom, 2)
+                    
+                    HStack(spacing: 4) {
+                            if message.isEdited == true {
+                                Text("(edited)")
+                                    .font(.system(size: 8))
+                                    .foregroundColor(.gray.opacity(0.8))
+                                    .italic()
+                            }
+                            
                             Text(formatTime(message.timestamp))
                                 .font(.system(size: 8))
                                 .foregroundColor(.gray.opacity(0.8))
@@ -1142,46 +1201,47 @@ struct DribbbleMessageRow: View {
                                 MessageStatusView(status: message.status ?? "SENT")
                             }
                         }
-                        .padding(.bottom, 6)
-                        .padding(.trailing, 10)
-                    }
-                    .background(isMe ? Color.softSage : Color.white.opacity(0.6))
-                    .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
-                    .cornerRadius(20)
-                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
-                    .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
+                    .padding(.bottom, 6)
+                    .padding(.trailing, 10)
                 }
-            }
-            .contextMenu {
-                if message.isDeleted != true {
-                    Button(action: onReply) {
-                        Label("Reply", systemImage: "arrowshape.turn.up.left")
-                    }
-                    if isMe {
-                        Button(action: onEdit) {
-                            Label("Edit", systemImage: "pencil")
-                        }
-                        Button(role: .destructive, action: onRevoke) {
-                            Label("Revoke", systemImage: "trash")
-                        }
-                    }
-                }
-            }
-            
-            if isMe {
-                Circle().fill(Color(hex: "D1D1FF").opacity(0.4)).frame(width: 24, height: 24)
-            } else {
-                Spacer(minLength: 40)
+                .background(isMe ? Color.softSage : Color.white.opacity(0.6))
+                .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
+                .cornerRadius(20)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
+                .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
             }
         }
+        .contextMenu {
+            Button(action: { UIPasteboard.general.string = message.content }) {
+                Label("Copy Text", systemImage: "doc.on.doc")
+            }
+            if message.isDeleted != true {
+                Button(action: onReply) {
+                    Label("Reply", systemImage: "arrowshape.turn.up.left")
+                }
+                if isMe {
+                    Button(action: onEdit) {
+                        Label("Edit Message", systemImage: "pencil")
+                    }
+                    Button(role: .destructive, action: onRevoke) {
+                        Label("Delete", systemImage: "trash.fill")
+                    }
+                }
+            }
+        }
+        
+        if isMe {
+            Circle().fill(Color(hex: "D1D1FF").opacity(0.4)).frame(width: 24, height: 24)
+        } else {
+            Spacer(minLength: 40)
+        }
+    }
         .offset(x: offset)
         .gesture(
             DragGesture()
                 .onChanged { value in
                     let translation = value.translation.width
-                    if isMe && translation < 0 {
-                        offset = max(translation, -60)
-                    } else if !isMe && translation > 0 {
+                    if translation > 0 {
                         offset = min(translation, 60)
                     }
                 }
@@ -1196,24 +1256,24 @@ struct DribbbleMessageRow: View {
                     }
                 }
         )
+}
+
+private func formatTime(_ timestamp: Double?) -> String {
+    guard let ts = timestamp else { return "" }
+    let date = Date(timeIntervalSince1970: ts / 1000)
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    return formatter.string(from: date)
+}
+
+private func resolveMediaURL(_ urlString: String?) -> URL? {
+    guard let urlString = urlString, !urlString.isEmpty else { return nil }
+    if urlString.hasPrefix("http") {
+        return URL(string: urlString)
     }
-    
-    private func formatTime(_ timestamp: Double?) -> String {
-        guard let ts = timestamp else { return "" }
-        let date = Date(timeIntervalSince1970: ts / 1000)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
-    }
-    
-    private func resolveMediaURL(_ urlString: String?) -> URL? {
-        guard let urlString = urlString, !urlString.isEmpty else { return nil }
-        if urlString.hasPrefix("http") {
-            return URL(string: urlString)
-        }
-        // Fallback for relative URLs from API Gateway
-        return URL(string: "http://localhost:9090/api/v1" + (urlString.hasPrefix("/") ? "" : "/") + urlString)
-    }
+    // Fallback for relative URLs from API Gateway
+    return URL(string: "http://localhost:9090/api/v1" + (urlString.hasPrefix("/") ? "" : "/") + urlString)
+}
 }
 
 struct MessageStatusView: View {
@@ -1431,7 +1491,7 @@ extension Color {
     static let slateBlue = Color(hex: "A9B5C2")
     static let charcoal = Color(hex: "2F3E46")
     static let glassBorder = Color.white.opacity(0.5)
-
+    
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0

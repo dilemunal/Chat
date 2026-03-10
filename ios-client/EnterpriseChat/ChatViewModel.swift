@@ -37,9 +37,15 @@ class ChatViewModel: ObservableObject {
                     ($0.messageId != nil && $0.messageId == newMsg.messageId) ||
                     ($0.localId != nil && $0.localId == newMsg.localId)
                 }) {
-                    self.messages[index] = newMsg
+                    if newMsg.isDeleted == true {
+                        self.messages.remove(at: index)
+                    } else {
+                        self.messages[index] = newMsg
+                    }
                 } else {
-                    self.messages.append(newMsg)
+                    if newMsg.isDeleted != true {
+                        self.messages.append(newMsg)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -58,6 +64,7 @@ class ChatViewModel: ObservableObject {
         
         // Optimistic UI Update
         var localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content, replyToId: replyToId)
+        localMsg.localId = localMsg.id
         localMsg.timestamp = Date().timeIntervalSince1970 * 1000
         self.messages.append(localMsg)
         
@@ -72,10 +79,18 @@ class ChatViewModel: ObservableObject {
     }
     
     func editMessage(chatId: String, messageId: String, newContent: String) {
+        // Optimistic UI for edit
+        DispatchQueue.main.async {
+            if let index = self.messages.firstIndex(where: { $0.messageId == messageId || $0.id == messageId }) {
+                self.messages[index].content = newContent
+                self.messages[index].isEdited = true
+            }
+        }
+        
         APIClient.shared.editMessage(chatId: chatId, messageId: messageId, newContent: newContent) { [weak self] updatedMsg in
             if let msg = updatedMsg {
                 DispatchQueue.main.async {
-                    if let index = self?.messages.firstIndex(where: { $0.id == msg.id }) {
+                    if let index = self?.messages.firstIndex(where: { $0.messageId == msg.messageId || $0.id == msg.id }) {
                         self?.messages[index] = msg
                     }
                 }
@@ -84,12 +99,15 @@ class ChatViewModel: ObservableObject {
     }
     
     func revokeMessage(chatId: String, messageId: String) {
+        // Optimistic Hard Delete
+        DispatchQueue.main.async {
+            self.messages.removeAll(where: { $0.messageId == messageId || $0.id == messageId })
+        }
+        
         APIClient.shared.revokeMessage(chatId: chatId, messageId: messageId) { [weak self] updatedMsg in
             if let msg = updatedMsg {
                 DispatchQueue.main.async {
-                    if let index = self?.messages.firstIndex(where: { $0.id == msg.id }) {
-                        self?.messages[index] = msg
-                    }
+                    self?.messages.removeAll(where: { $0.messageId == msg.messageId || $0.id == msg.id })
                 }
             }
         }
@@ -124,10 +142,12 @@ class ChatViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let url):
-                    // Remove optimistic message and send the real one
-                    self?.messages.removeAll(where: { $0.id == tempId })
+                    // Optimistic update in place
+                    if let index = self?.messages.firstIndex(where: { $0.id == tempId }) {
+                        self?.messages[index].content = "[Image]"
+                        self?.messages[index].mediaUrl = url
+                    }
                     
-                    // Create and send the final message via WebSocket for real-time delivery
                     var finalMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "[Image]", mediaUrl: url, mediaType: "IMAGE")
                     finalMsg.localId = tempId
                     finalMsg.timestamp = Date().timeIntervalSince1970 * 1000
@@ -151,12 +171,20 @@ class ChatViewModel: ObservableObject {
             self.messages.append(localMsg)
         }
         
-        guard let data = try? Data(contentsOf: audioUrl) else { return }
+        guard let data = try? Data(contentsOf: audioUrl) else {
+            DispatchQueue.main.async { self.messages.removeAll(where: { $0.id == tempId }) }
+            return
+        }
+        
         APIClient.shared.uploadMedia(data: data, fileName: "\(tempId).m4a", contentType: "audio/m4a") { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let url):
-                    self?.messages.removeAll(where: { $0.id == tempId })
+                    // Optimistic update in place to avoid flickering and "stuck" states
+                    if let index = self?.messages.firstIndex(where: { $0.id == tempId }) {
+                        self?.messages[index].content = "Voice Note"
+                        self?.messages[index].mediaUrl = url
+                    }
                     
                     var finalMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "Voice Note", replyToId: replyToId, mediaUrl: url, mediaType: "AUDIO")
                     finalMsg.localId = tempId

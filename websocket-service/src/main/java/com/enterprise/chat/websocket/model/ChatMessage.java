@@ -18,4 +18,7 @@ public class ChatMessage implements Serializable {
     private String mediaUrl;
     private String mediaType;
     private String localId;
+    private String replyToId;
+    private boolean isEdited;
+    private boolean isDeleted;
 }

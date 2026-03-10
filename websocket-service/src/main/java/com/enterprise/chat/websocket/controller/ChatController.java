@@ -1,7 +1,6 @@
 package com.enterprise.chat.websocket.controller;
 
 import com.enterprise.chat.websocket.model.ChatMessage;
-import com.enterprise.chat.websocket.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,8 +12,6 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @lombok.extern.slf4j.Slf4j
 public class ChatController {
-
-    private final RedisPublisher redisPublisher;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @MessageMapping("/chat.send")
@@ -28,10 +25,7 @@ public class ChatController {
         log.info("Publishing to Kafka: chatId={}, content={}, mediaUrl={}", 
             chatMessage.getChatId(), chatMessage.getContent(), chatMessage.getMediaUrl());
         
-        // Publish to Redis for other WebSocket instances to broadcast to their connections
-        redisPublisher.publish(chatMessage);
-        
-        // Send to Kafka for MessageService to persist to Cassandra
+        // Send to Kafka for MessageService to persist to Cassandra, and for our own Consumer to broadcast to Redis
         kafkaTemplate.send("chat-messages", chatMessage.getChatId(), chatMessage);
     }
 }

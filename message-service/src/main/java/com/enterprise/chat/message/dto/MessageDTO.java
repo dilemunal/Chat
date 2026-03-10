@@ -23,4 +23,5 @@ public class MessageDTO {
     private String mediaUrl;
     private String mediaType;
     private String localId;
+    private String replyToId;
 }

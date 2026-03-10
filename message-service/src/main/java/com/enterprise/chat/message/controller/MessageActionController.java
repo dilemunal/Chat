@@ -5,8 +5,11 @@ import com.enterprise.chat.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -16,6 +19,7 @@ import java.util.UUID;
 public class MessageActionController {
 
     private final MessageRepository messageRepository;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @PutMapping("/{chatId}/{messageId}/edit")
     public ResponseEntity<Message> editMessage(
@@ -35,7 +39,9 @@ public class MessageActionController {
                     }
                     msg.setContent(newContent);
                     msg.setEdited(true);
-                    return ResponseEntity.ok(messageRepository.save(msg));
+                    Message saved = messageRepository.save(msg);
+                    kafkaTemplate.send("chat-messages", chatId, saved);
+                    return ResponseEntity.ok(saved);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -52,9 +58,24 @@ public class MessageActionController {
                 
         return messageRepository.findById(key)
                 .map(msg -> {
-                    msg.setContent("This message was deleted");
+                    // Hard delete the message from the database
+                    messageRepository.delete(msg);
+                    
+                    // Create a dummy deleted message to notify existing clients to remove it from UI
                     msg.setDeleted(true);
-                    return ResponseEntity.ok(messageRepository.save(msg));
+                    msg.setContent("This message was deleted");
+                    kafkaTemplate.send("chat-messages", chatId, msg);
+                    
+                    // Publish the new last message so the Chat List updates the preview
+                    List<Message> msgs = messageRepository.findByKeyChatId(chatId);
+                    Message lastMsg = msgs.stream().max(Comparator.comparing(Message::getTimestamp)).orElse(null);
+                    if (lastMsg != null) {
+                        // Sleep briefly so the delete event hits the consumer first, followed by the new last message
+                        try { Thread.sleep(50); } catch (Exception ignored) {}
+                        kafkaTemplate.send("chat-messages", chatId, lastMsg);
+                    }
+                    
+                    return ResponseEntity.ok(msg);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }

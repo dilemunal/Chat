@@ -8,27 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		0152E8F270162822D1F74CCF /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 541D0983FA77325461BDF544 /* Models.swift */; };
-		0A6F3A05442340984C4C1682 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FADC3FD2D9EDEDED2EBF81E /* Untitled.swift */; };
 		0D28640C54E4FDBDC66C9740 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F2BC12C6E3E96E1C6CD1A3 /* ContentView.swift */; };
 		32F37774E9E567F63EEB5342 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CD11A874EA86D32D2E97D5 /* App.swift */; };
 		4A9B1A17A49B36536DC89564 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = B0154D6DCF0561AE9323AE3D /* Starscream */; };
 		8834CDDB870EB8BED9EDFA3F /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C534E3FDFF7977A4C73D6F7 /* ChatViewModel.swift */; };
+		8C5675FB2F609A0500D03071 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5675FA2F609A0500D03071 /* WebSocketManager.swift */; };
 		B2CE3BE1235A39E44C5EFBDE /* Package.resolved in Resources */ = {isa = PBXBuildFile; fileRef = B243D570D2E8F77EAFAE4176 /* Package.resolved */; };
 		BD8796B86C0D520BF576CD51 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAE2E8B740BF51CF5AF2A7F /* APIClient.swift */; };
 		BDD61D396BB1AA238894BBB9 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172E143A0E7877B3C1B367CE /* AudioManager.swift */; };
-		ED5F176F2E3E22D7925669C2 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D55822A04FE605D8493B5D9 /* WebSocketManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		172E143A0E7877B3C1B367CE /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioManager.swift; sourceTree = "<group>"; };
 		37F2BC12C6E3E96E1C6CD1A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		399C24821FFA6B82DC5FD7AF /* EnterpriseChat.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EnterpriseChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		399C24821FFA6B82DC5FD7AF /* EnterpriseChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnterpriseChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		541D0983FA77325461BDF544 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		5C534E3FDFF7977A4C73D6F7 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
-		5FADC3FD2D9EDEDED2EBF81E /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
-		7D55822A04FE605D8493B5D9 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		85CD11A874EA86D32D2E97D5 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
-		B243D570D2E8F77EAFAE4176 /* Package.resolved */ = {isa = PBXFileReference; path = Package.resolved; sourceTree = "<group>"; };
+		8C5675FA2F609A0500D03071 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		B243D570D2E8F77EAFAE4176 /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
 		EAAE2E8B740BF51CF5AF2A7F /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,10 +58,9 @@
 				172E143A0E7877B3C1B367CE /* AudioManager.swift */,
 				5C534E3FDFF7977A4C73D6F7 /* ChatViewModel.swift */,
 				37F2BC12C6E3E96E1C6CD1A3 /* ContentView.swift */,
+				8C5675FA2F609A0500D03071 /* WebSocketManager.swift */,
 				541D0983FA77325461BDF544 /* Models.swift */,
 				B243D570D2E8F77EAFAE4176 /* Package.resolved */,
-				5FADC3FD2D9EDEDED2EBF81E /* Untitled.swift */,
-				7D55822A04FE605D8493B5D9 /* WebSocketManager.swift */,
 			);
 			name = EnterpriseChat;
 			path = .;
@@ -108,8 +105,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 41BC201EC2CDD83AEC2C7133 /* Build configuration list for PBXProject "EnterpriseChat" */;
 			developmentRegion = en;
@@ -155,8 +150,7 @@
 				8834CDDB870EB8BED9EDFA3F /* ChatViewModel.swift in Sources */,
 				0D28640C54E4FDBDC66C9740 /* ContentView.swift in Sources */,
 				0152E8F270162822D1F74CCF /* Models.swift in Sources */,
-				0A6F3A05442340984C4C1682 /* Untitled.swift in Sources */,
-				ED5F176F2E3E22D7925669C2 /* WebSocketManager.swift in Sources */,
+				8C5675FB2F609A0500D03071 /* WebSocketManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +224,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone to record voice notes.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -247,6 +242,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need access to your microphone to record voice notes.";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (

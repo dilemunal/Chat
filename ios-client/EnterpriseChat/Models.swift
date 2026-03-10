@@ -22,7 +22,9 @@ struct ChatMessage: Codable, Identifiable, Hashable {
     
     enum CodingKeys: String, CodingKey {
         case chatId, messageId, senderId, content, timestamp
-        case status, isEdited, isDeleted, replyToId
+        case status, replyToId
+        case isEdited = "edited"
+        case isDeleted = "deleted"
         case mediaUrl, mediaType, localId
     }
 }

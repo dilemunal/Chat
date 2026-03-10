@@ -66,6 +66,7 @@ public class MessageController {
                 .mediaUrl(message.getMediaUrl())
                 .mediaType(message.getMediaType())
                 .localId(message.getLocalId())
+                .replyToId(message.getReplyToId() != null ? message.getReplyToId().toString() : null)
                 .build();
     }
 }
