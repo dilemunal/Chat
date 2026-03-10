@@ -6,7 +6,7 @@
 	<integer>11</integer>
 	<key>logs</key>
 	<dict>
-		<key>12CCA619-7484-4F7E-8932-7E4499D0110B</key>
+		<key>CA37C880-02A4-44D4-9D7E-13B45B9BE9E8</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -15,21 +15,21 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>12CCA619-7484-4F7E-8932-7E4499D0110B.xcactivitylog</string>
+			<string>CA37C880-02A4-44D4-9D7E-13B45B9BE9E8.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>E</string>
+				<string>W</string>
 				<key>totalNumberOfAnalyzerIssues</key>
 				<integer>0</integer>
 				<key>totalNumberOfErrors</key>
-				<integer>3</integer>
+				<integer>0</integer>
 				<key>totalNumberOfTestFailures</key>
 				<integer>0</integer>
 				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
+				<integer>2</integer>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
 			<string>EnterpriseChat 2 project</string>
@@ -40,15 +40,15 @@
 			<key>signature</key>
 			<string>Building project EnterpriseChat with scheme EnterpriseChat</string>
 			<key>timeStartedRecording</key>
-			<real>794820956.19936395</real>
+			<real>794838076.21657705</real>
 			<key>timeStoppedRecording</key>
-			<real>794820957.68242204</real>
+			<real>794838079.99001098</real>
 			<key>title</key>
 			<string>Building project EnterpriseChat with scheme EnterpriseChat</string>
 			<key>uniqueIdentifier</key>
-			<string>12CCA619-7484-4F7E-8932-7E4499D0110B</string>
+			<string>CA37C880-02A4-44D4-9D7E-13B45B9BE9E8</string>
 		</dict>
-		<key>4A5BE66E-B1DD-4E1A-B646-2120F66AC4B2</key>
+		<key>CBF65A0C-2454-4953-8F91-F9AF41F1415F</key>
 		<dict>
 			<key>className</key>
 			<string>IDECommandLineBuildLog</string>
@@ -57,24 +57,24 @@
 			<key>domainType</key>
 			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
 			<key>fileName</key>
-			<string>4A5BE66E-B1DD-4E1A-B646-2120F66AC4B2.xcactivitylog</string>
+			<string>CBF65A0C-2454-4953-8F91-F9AF41F1415F.xcactivitylog</string>
 			<key>hasPrimaryLog</key>
 			<true/>
 			<key>primaryObservable</key>
 			<dict>
 				<key>highLevelStatus</key>
-				<string>E</string>
+				<string>W</string>
 				<key>totalNumberOfAnalyzerIssues</key>
 				<integer>0</integer>
 				<key>totalNumberOfErrors</key>
-				<integer>4</integer>
+				<integer>0</integer>
 				<key>totalNumberOfTestFailures</key>
 				<integer>0</integer>
 				<key>totalNumberOfWarnings</key>
-				<integer>0</integer>
+				<integer>2</integer>
 			</dict>
 			<key>schemeIdentifier-containerName</key>
-			<string>EnterpriseChat project</string>
+			<string>EnterpriseChat 2 project</string>
 			<key>schemeIdentifier-schemeName</key>
 			<string>EnterpriseChat</string>
 			<key>schemeIdentifier-sharedScheme</key>
@@ -82,13 +82,13 @@
 			<key>signature</key>
 			<string>Building project EnterpriseChat with scheme EnterpriseChat</string>
 			<key>timeStartedRecording</key>
-			<real>794820816.20977795</real>
+			<real>794837401.329386</real>
 			<key>timeStoppedRecording</key>
-			<real>794820817.02211797</real>
+			<real>794837405.22808695</real>
 			<key>title</key>
 			<string>Building project EnterpriseChat with scheme EnterpriseChat</string>
 			<key>uniqueIdentifier</key>
-			<string>4A5BE66E-B1DD-4E1A-B646-2120F66AC4B2</string>
+			<string>CBF65A0C-2454-4953-8F91-F9AF41F1415F</string>
 		</dict>
 	</dict>
 </dict>

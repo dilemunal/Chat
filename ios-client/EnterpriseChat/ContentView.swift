@@ -113,6 +113,14 @@ struct ChatListView: View {
             ZStack {
                 Color(hex: "F4F4F4").ignoresSafeArea()
                 
+                // GİZLİ NAVİGASYON TETİKLEYİCİSİ
+                NavigationLink(
+                    destination: ChatRoomView(currentUser: currentUser, chatId: targetNewRoom?.id ?? "", title: targetNewRoom?.name ?? "Chat"),
+                    isActive: $navigateToNewRoom,
+                    label: { EmptyView() }
+                )
+                .hidden()
+                
                 VStack(spacing: 12) {
                     HStack {
                         Text("Messages")
@@ -170,17 +178,16 @@ struct ChatListView: View {
                     }
                 }
             }
-            .navigationDestination(isPresented: $navigateToNewRoom) {
-                ChatRoomView(currentUser: currentUser, chatId: targetNewRoom?.id ?? "", title: targetNewRoom?.name ?? "Chat")
-            }
-            .navigationBarHidden(true)
-            .sheet(isPresented: $isShowingGroupCreation) {
+            .toolbar(.hidden, for: .navigationBar)
+            // SHEET KAPANINCA NAVİGASYONU TETİKLE
+            .sheet(isPresented: $isShowingGroupCreation, onDismiss: {
+                if targetNewRoom != nil {
+                    navigateToNewRoom = true
+                }
+            }) {
                 MultiContactSelectionView(currentUser: currentUser) { newRoom in
                     self.recentChats.insert(newRoom, at: 0)
                     self.targetNewRoom = newRoom
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.navigateToNewRoom = true
-                    }
                 }
             }
             .onAppear(perform: loadRecentChats)
@@ -197,7 +204,8 @@ struct ChatListView: View {
         }
     }
 }
-
+ 
+   
 struct ChatRowView: View {
     let room: ChatRoom
     let currentUser: User
@@ -260,6 +268,14 @@ struct ContactListView: View {
             ZStack {
                 Color(hex: "F4F4F4").ignoresSafeArea()
                 
+                // GİZLİ NAVİGASYON TETİKLEYİCİSİ
+                NavigationLink(
+                    destination: ChatRoomView(currentUser: currentUser, chatId: targetRoomId, title: targetUserTitle),
+                    isActive: $navigateToChat,
+                    label: { EmptyView() }
+                )
+                .hidden()
+                
                 VStack(spacing: 12) {
                     HStack {
                         Text("People")
@@ -298,10 +314,7 @@ struct ContactListView: View {
                     }
                 }
             }
-            .navigationDestination(isPresented: $navigateToChat) {
-                ChatRoomView(currentUser: currentUser, chatId: targetRoomId, title: targetUserTitle)
-            }
-            .navigationBarHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
             .onAppear(perform: loadUsers)
         }
     }
@@ -491,6 +504,8 @@ struct MultiContactSelectionView: View {
     @State private var selectedUserIds = Set<String>()
     @State private var groupName = ""
     @State private var isLoading = false
+    @State private var errorMessage = ""
+    @State private var showError = false
     
     var body: some View {
         NavigationView {
@@ -564,6 +579,9 @@ struct MultiContactSelectionView: View {
             .navigationBarTitle("New Group", displayMode: .inline)
             .navigationBarItems(leading: Button("Cancel") { presentationMode.wrappedValue.dismiss() })
             .onAppear(perform: loadUsers)
+            .alert(isPresented: $showError) {
+                Alert(title: Text("Group API Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+            }
         }
     }
     
@@ -587,6 +605,8 @@ struct MultiContactSelectionView: View {
                     presentationMode.wrappedValue.dismiss()
                 } else if case .failure(let error) = result {
                     print("DEBUG [MultiContact]: Failed to create group room: \(error)")
+                    self.errorMessage = error.localizedDescription
+                    self.showError = true
                 }
             }
         }
