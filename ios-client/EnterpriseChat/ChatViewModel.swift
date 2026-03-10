@@ -47,10 +47,16 @@ class ChatViewModel: ObservableObject {
     
     func sendMessage(chatId: String, senderId: String, replyToId: String? = nil) {
         guard !inputText.isEmpty else { return }
-        // For now, WebSocketManager.sendMessage only supports basic content. 
-        // We might need to extend it for replyToId or use REST for complex actions.
-        WebSocketManager.shared.sendMessage(chatId: chatId, senderId: senderId, content: inputText)
+        let content = inputText
         inputText = ""
+        
+        // Local append for instant sync
+        let localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content)
+        if !messages.contains(where: { $0.id == localMsg.id }) {
+            messages.append(localMsg)
+        }
+        
+        WebSocketManager.shared.sendMessage(chatId: chatId, senderId: senderId, content: content)
     }
     
     func editMessage(chatId: String, messageId: String, newContent: String) {
@@ -99,3 +105,4 @@ class ChatViewModel: ObservableObject {
         }
     }
 }
+

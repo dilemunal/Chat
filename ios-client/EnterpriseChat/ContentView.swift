@@ -210,17 +210,27 @@ struct ChatRowView: View {
     let room: ChatRoom
     let currentUser: User
     
+    private var displayName: String {
+        if room.group {
+            return room.name ?? "Group Chat"
+        } else {
+            // Derive name for 1:1 chat from the other member
+            let otherMember = room.members.first(where: { $0 != currentUser.username })
+            return otherMember ?? "Chat"
+        }
+    }
+    
     var body: some View {
         HStack(spacing: 10) {
             ZStack {
                 Circle()
                     .fill(Color(hex: "D1D1FF").opacity(0.3))
                     .frame(width: 40, height: 40)
-                Text(String((room.name ?? "C").prefix(1)))
+                Text(String(displayName.prefix(1)))
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(Color(hex: "4A4A8F"))
                 
-                if WebSocketManager.shared.onlineUsers.contains(room.name ?? "") { // Simplified for demo
+                if WebSocketManager.shared.onlineUsers.contains(displayName) {
                     Circle()
                         .fill(Color.green)
                         .frame(width: 10, height: 10)
@@ -231,16 +241,18 @@ struct ChatRowView: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 HStack {
-                    Text(room.name ?? "Chat")
+                    Text(displayName)
                         .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
                     Spacer()
-                    Text("Now")
-                        .font(.system(size: 10))
-                        .foregroundColor(.gray)
+                    if let _ = room.lastMessageAt {
+                        Text("Now")
+                            .font(.system(size: 10))
+                            .foregroundColor(.gray)
+                    }
                 }
                 
-                Text("Start messaging...")
+                Text(room.lastMessage ?? "Start messaging...")
                     .font(.system(size: 13))
                     .foregroundColor(.gray)
                     .lineLimit(1)
@@ -1142,3 +1154,4 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
     }
 }
+

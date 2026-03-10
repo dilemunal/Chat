@@ -25,6 +25,12 @@ public class ChatRoom {
     @Column(name = "is_group")
     private boolean group;
 
+    @Column(name = "last_message")
+    private String lastMessage;
+
+    @Column(name = "last_message_at")
+    private Instant lastMessageAt;
+
     @Column(name = "created_at")
     private Instant createdAt;
 

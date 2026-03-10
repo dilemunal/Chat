@@ -33,5 +33,8 @@ struct ChatRoom: Codable, Identifiable, Hashable {
     let name: String?
     let group: Bool
     let members: Set<String>
+    let lastMessage: String?
+    let lastMessageAt: String?
     let createdAt: String?
 }
+

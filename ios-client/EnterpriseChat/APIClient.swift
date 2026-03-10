@@ -53,14 +53,20 @@ class APIClient {
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error { return completion(.failure(error)) }
-            if let httpResp = response as? HTTPURLResponse, httpResp.statusCode == 401 {
-                return completion(.failure(NSError(domain: "Auth", code: 401, userInfo: [NSLocalizedDescriptionKey: "Kullanıcı adı veya şifre hatalı."])))
+            
+            guard let data = data else {
+                return completion(.failure(NSError(domain: "Auth", code: 500, userInfo: [NSLocalizedDescriptionKey: "Sunucudan veri alınamadı."])))
             }
             
-            guard let data = data,
-                  let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                  let token = json["access_token"] as? String else {
-                return completion(.failure(NSError(domain: "Auth", code: 500, userInfo: [NSLocalizedDescriptionKey: "Token alınamadı."])))
+            let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any]
+            
+            if let httpResp = response as? HTTPURLResponse, httpResp.statusCode >= 400 {
+                let errorDesc = json?["error_description"] as? String ?? json?["error"] as? String ?? "Bilinmeyen bir hata oluştu (Status: \(httpResp.statusCode))"
+                return completion(.failure(NSError(domain: "Auth", code: httpResp.statusCode, userInfo: [NSLocalizedDescriptionKey: errorDesc])))
+            }
+            
+            guard let token = json?["access_token"] as? String else {
+                return completion(.failure(NSError(domain: "Auth", code: 500, userInfo: [NSLocalizedDescriptionKey: "Token response formatı hatalı."])))
             }
             
             self.accessToken = token
@@ -311,3 +317,5 @@ extension CharacterSet {
         return allowed
     }()
 }
+
+
