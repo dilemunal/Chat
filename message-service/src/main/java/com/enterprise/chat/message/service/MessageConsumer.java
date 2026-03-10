@@ -25,6 +25,8 @@ public class MessageConsumer {
     @KafkaListener(topics = "chat-messages", groupId = "message-service-group")
     public void consume(ChatMessageDTO chatMessageDTO) {
         log.info("Received message from Kafka: {}", chatMessageDTO);
+        log.info("Mapping mediaUrl={}, mediaType={}, localId={}", 
+            chatMessageDTO.getMediaUrl(), chatMessageDTO.getMediaType(), chatMessageDTO.getLocalId());
         
         Message message = Message.builder()
                 .key(Message.MessageKey.builder()
@@ -41,7 +43,8 @@ public class MessageConsumer {
                 .build();
         
         messageRepository.save(message);
-        log.info("Message persisted to Cassandra: {}", message.getKey().getMessageId());
+        log.info("Message persisted to Cassandra: messageId={}, mediaUrl={}", 
+            message.getKey().getMessageId(), message.getMediaUrl());
     }
 
     @Data
