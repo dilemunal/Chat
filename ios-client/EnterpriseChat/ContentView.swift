@@ -127,7 +127,7 @@ struct ChatListView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(hex: "F4F4F4").ignoresSafeArea()
+                Color.softBackground.ignoresSafeArea()
                 
                 // GİZLİ NAVİGASYON TETİKLEYİCİSİ
                 NavigationLink(
@@ -152,7 +152,7 @@ struct ChatListView: View {
                             .foregroundColor(.black)
                             .padding(.vertical, 8)
                             .padding(.horizontal, 12)
-                            .background(Color(hex: "D1D1FF"))
+                            .background(Color.softSage)
                             .cornerRadius(15)
                         }
                     }
@@ -171,16 +171,16 @@ struct ChatListView: View {
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 14)
-                    .background(Color.white)
+                    .background(Color.white.opacity(0.8))
                     .cornerRadius(18)
-                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(searchText.isEmpty ? Color.gray.opacity(0.1) : Color.blue.opacity(0.3), lineWidth: 1))
+                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.glassBorder, lineWidth: 1))
                     .padding(.horizontal)
                     
                     if sortedChats.isEmpty && searchText.isEmpty {
                         VStack(spacing: 20) {
                             Image(systemName: "bubble.left.and.bubble.right")
                                 .font(.system(size: 50))
-                                .foregroundColor(Color(hex: "D1D1FF"))
+                                .foregroundColor(Color.slateBlue.opacity(0.7))
                             Text("No messages yet")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
@@ -222,7 +222,7 @@ struct ChatListView: View {
                                                     HStack {
                                                         Text(msg.senderId)
                                                             .font(.system(size: 12, weight: .bold))
-                                                            .foregroundColor(Color(hex: "4A4A8F"))
+                                                            .foregroundColor(Color.charcoal)
                                                         Spacer()
                                                         Text(formatDate(msg.timestamp))
                                                             .font(.system(size: 10))
@@ -256,7 +256,7 @@ struct ChatListView: View {
                             }
                         }
                         .listStyle(.plain)
-                        .background(Color(hex: "F4F4F4"))
+                        .background(Color.softBackground)
                         .scrollContentBackground(.hidden)
                     }
                 }
@@ -342,29 +342,29 @@ struct ChatRowView: View {
     }
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .fill(Color(hex: "D1D1FF").opacity(0.3))
-                    .frame(width: 40, height: 40)
+                    .fill(Color.slateBlue.opacity(0.2))
+                    .frame(width: 46, height: 46)
                 Text(String(displayName.prefix(1)))
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundColor(Color(hex: "4A4A8F"))
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(Color.charcoal.opacity(0.8))
                 
                 if WebSocketManager.shared.onlineUsers.contains(displayName) {
                     Circle()
-                        .fill(Color.green)
-                        .frame(width: 10, height: 10)
+                        .fill(Color.softSage)
+                        .frame(width: 12, height: 12)
                         .overlay(Circle().stroke(Color.white, lineWidth: 2))
-                        .offset(x: 14, y: 14)
+                        .offset(x: 16, y: 16)
                 }
             }
             
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(displayName)
                         .font(.system(size: 15, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
+                        .foregroundColor(Color.charcoal)
                     Spacer()
                     if let _ = room.lastMessageAt {
                         Text("Now")
@@ -379,10 +379,12 @@ struct ChatRowView: View {
                     .lineLimit(1)
             }
         }
-        .padding(10)
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.01), radius: 3, x: 0, y: 1)
+        .padding(12)
+        .background(Color.white.opacity(0.6))
+        .background(.ultraThinMaterial)
+        .cornerRadius(20)
+        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.glassBorder, lineWidth: 1))
+        .shadow(color: Color.black.opacity(0.03), radius: 5, x: 0, y: 2)
     }
 }
 
@@ -425,8 +427,9 @@ struct ContactListView: View {
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 14)
-                    .background(Color.white)
+                    .background(Color.white.opacity(0.8))
                     .cornerRadius(18)
+                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.glassBorder, lineWidth: 1))
                     .padding(.horizontal)
 
                     if isLoading {
@@ -488,17 +491,19 @@ struct ContactRowView: View {
                 }
             }
         }) {
-            HStack(spacing: 10) {
+            HStack(spacing: 12) {
                 Circle()
-                    .fill(Color(hex: "D1D1FF"))
-                    .frame(width: 36, height: 36)
+                    .fill(Color.slateBlue.opacity(0.2))
+                    .frame(width: 42, height: 42)
                     .overlay(
                         ZStack {
-                            Text(String(user.username.prefix(1)).uppercased()).foregroundColor(.white).font(.system(size: 14, weight: .bold))
+                            Text(String(user.username.prefix(1)).uppercased())
+                                .foregroundColor(Color.charcoal.opacity(0.8))
+                                .font(.system(size: 16, weight: .bold))
                             if WebSocketManager.shared.onlineUsers.contains(user.username) {
                                 Circle()
-                                    .fill(Color.green)
-                                    .frame(width: 10, height: 10)
+                                    .fill(Color.softSage)
+                                    .frame(width: 12, height: 12)
                                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
                                     .offset(x: 14, y: 14)
                             }
@@ -521,9 +526,11 @@ struct ContactRowView: View {
                         .foregroundColor(Color(hex: "D1D1FF"))
                 }
             }
-            .padding(8)
-            .background(Color.white)
-            .cornerRadius(16)
+            .padding(10)
+            .background(Color.white.opacity(0.6))
+            .background(.ultraThinMaterial)
+            .cornerRadius(18)
+            .overlay(RoundedRectangle(cornerRadius: 18).stroke(Color.glassBorder, lineWidth: 1))
         }
         .alert(isPresented: $showError) {
             Alert(title: Text("API Error"), message: Text(errorMessage), dismissButton: .default(Text("OK")))
@@ -657,11 +664,13 @@ struct ChatRoomView: View {
     let title: String
     
     @StateObject private var viewModel = ChatViewModel()
+    @StateObject private var audioManager = AudioManager()
     @State private var editingMessageId: String? = nil
     @State private var replyingToId: String? = nil
     @State private var isPickerPresented = false
     @State private var selectedImage: UIImage? = nil
     @State private var isEmojiPanelPresented = false
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(spacing: 0) {
@@ -673,7 +682,7 @@ struct ChatRoomView: View {
             
             inputView
         }
-        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarHidden(true)
         .onAppear { viewModel.connect(chatId: chatId, username: currentUser.username) }
         .onDisappear { viewModel.disconnect(chatId: chatId) }
         .sheet(isPresented: $isPickerPresented) {
@@ -695,10 +704,16 @@ struct ChatRoomView: View {
     
     private var headerView: some View {
         HStack(spacing: 15) {
+            Button(action: { dismiss() }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(Color.charcoal)
+            }
+            
             Circle()
-                .fill(Color(hex: "D1D1FF"))
-                .frame(width: 40, height: 40)
-                .overlay(Text(String(title.prefix(1))).foregroundColor(.white).bold())
+                .fill(Color.slateBlue.opacity(0.3))
+                .frame(width: 44, height: 44)
+                .overlay(Text(String(title.prefix(1))).foregroundColor(Color.charcoal.opacity(0.8)).font(.system(size: 18, weight: .bold)))
             
             VStack(alignment: .leading) {
                 Text(title).font(.system(size: 18, weight: .bold, design: .rounded))
@@ -719,13 +734,15 @@ struct ChatRoomView: View {
             Button(action: {}) {
                 Image(systemName: "phone.fill")
                     .padding(10)
-                    .background(Color(hex: "D1D1FF").opacity(0.3))
+                    .background(Color.slateBlue.opacity(0.15))
                     .clipShape(Circle())
-                    .foregroundColor(Color(hex: "4A4A8F"))
+                    .foregroundColor(Color.charcoal.opacity(0.8))
             }
         }
-        .padding()
-        .background(Color.white)
+        .padding(.horizontal)
+        .padding(.vertical, 10)
+        .background(.ultraThinMaterial)
+        .overlay(Rectangle().frame(width: nil, height: 1, alignment: .bottom).foregroundColor(Color.glassBorder), alignment: .bottom)
     }
     
     private func messageListView(proxy: ScrollViewProxy) -> some View {
@@ -741,10 +758,12 @@ struct ChatRoomView: View {
                             Text(formatHeaderDate(date))
                                 .font(.system(size: 11, weight: .bold))
                                 .padding(.vertical, 4)
-                                .padding(.horizontal, 12)
-                                .background(Color.white.opacity(0.9))
-                                .cornerRadius(10)
-                                .shadow(color: .black.opacity(0.05), radius: 2)
+                                .padding(.horizontal, 14)
+                                .background(Color.white.opacity(0.5))
+                                .background(.ultraThinMaterial)
+                                .cornerRadius(12)
+                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.glassBorder, lineWidth: 1))
+                                .shadow(color: .black.opacity(0.02), radius: 2)
                             Spacer()
                         }
                         .padding(.vertical, 8)
@@ -752,6 +771,7 @@ struct ChatRoomView: View {
                         
                         ForEach(grouped[date] ?? []) { msg in
                             DribbbleMessageRow(
+                                audioManager: audioManager,
                                 message: msg,
                                 isMe: msg.senderId == currentUser.username,
                                 repliedContent: viewModel.messages.first(where: { $0.id == msg.replyToId })?.content,
@@ -766,6 +786,12 @@ struct ChatRoomView: View {
                                 },
                                 onReply: {
                                     replyingToId = msg.messageId
+                                },
+                                onQuoteTap: {
+                                    if let replyId = msg.replyToId,
+                                       let targetMsg = viewModel.messages.first(where: { $0.messageId == replyId }) {
+                                        withAnimation { proxy.scrollTo(targetMsg.id, anchor: .center) }
+                                    }
                                 }
                             )
                             .id(msg.id)
@@ -782,7 +808,7 @@ struct ChatRoomView: View {
             }
             .padding()
         }
-        .background(Color(hex: "F4F4F4"))
+        .background(Color.softBackground)
         .onChange(of: viewModel.messages) { _ in
             if let last = viewModel.messages.last {
                 withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }
@@ -819,35 +845,62 @@ struct ChatRoomView: View {
                     Image(systemName: "face.smiling").foregroundColor(.gray)
                 }
                 
-                TextField("Type something...", text: $viewModel.inputText)
-                    .padding(12)
-                    .background(Color(hex: "F4F4F4"))
+                TextField("Type a message...", text: $viewModel.inputText)
+                    .padding(14)
+                    .background(Color.white.opacity(0.6))
                     .cornerRadius(25)
+                    .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.glassBorder, lineWidth: 1))
                     .onChange(of: viewModel.inputText) { newValue in
                         WebSocketManager.shared.sendTyping(chatId: chatId, username: currentUser.username, isTyping: !newValue.isEmpty)
                     }
                 
-                Button(action: {
-                    if let editId = editingMessageId {
-                        viewModel.editMessage(chatId: chatId, messageId: editId, newContent: viewModel.inputText)
-                        editingMessageId = nil
-                        viewModel.inputText = ""
-                    } else {
-                        viewModel.sendMessage(chatId: chatId, senderId: currentUser.username, replyToId: replyingToId)
-                        replyingToId = nil
-                    }
-                }) {
-                    Image(systemName: editingMessageId != nil ? "pencil.circle.fill" : "paperplane.fill")
+                if viewModel.inputText.isEmpty && editingMessageId == nil {
+                    Image(systemName: audioManager.isRecording ? "stop.fill" : "mic.fill")
                         .foregroundColor(.white)
-                        .padding(12)
-                        .background(Color(hex: "D1D1FF"))
+                        .padding(14)
+                        .background(audioManager.isRecording ? Color.red : Color.softSage)
                         .clipShape(Circle())
-                        .shadow(color: Color(hex: "D1D1FF").opacity(0.4), radius: 5, x: 0, y: 3)
+                        .shadow(color: (audioManager.isRecording ? Color.red : Color.softSage).opacity(0.4), radius: 5, x: 0, y: 3)
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { _ in
+                                    if !audioManager.isRecording {
+                                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                                        generator.impactOccurred()
+                                        audioManager.startRecording()
+                                    }
+                                }
+                                .onEnded { _ in
+                                    if let url = audioManager.stopRecording() {
+                                        viewModel.uploadAndSendAudio(chatId: chatId, senderId: currentUser.username, audioUrl: url, replyToId: replyingToId)
+                                        replyingToId = nil
+                                    }
+                                }
+                        )
+                } else {
+                    Button(action: {
+                        if let editId = editingMessageId {
+                            viewModel.editMessage(chatId: chatId, messageId: editId, newContent: viewModel.inputText)
+                            editingMessageId = nil
+                            viewModel.inputText = ""
+                        } else {
+                            viewModel.sendMessage(chatId: chatId, senderId: currentUser.username, replyToId: replyingToId)
+                            replyingToId = nil
+                        }
+                    }) {
+                        Image(systemName: editingMessageId != nil ? "pencil.circle.fill" : "paperplane.fill")
+                            .foregroundColor(.white)
+                            .padding(14)
+                            .background(Color.softSage)
+                            .clipShape(Circle())
+                            .shadow(color: Color.softSage.opacity(0.4), radius: 5, x: 0, y: 3)
+                    }
+                    .disabled(viewModel.inputText.isEmpty)
                 }
-                .disabled(viewModel.inputText.isEmpty)
             }
             .padding()
-            .background(Color.white)
+            .background(.ultraThinMaterial)
+            .shadow(color: Color.black.opacity(0.03), radius: 10, x: 0, y: -5)
         }
     }
 
@@ -891,6 +944,7 @@ struct EmojiPanelView: View {
 }
 
 struct DribbbleMessageRow: View {
+    @ObservedObject var audioManager: AudioManager
     let message: ChatMessage
     let isMe: Bool
     var repliedContent: String? = nil
@@ -898,6 +952,9 @@ struct DribbbleMessageRow: View {
     var onEdit: () -> Void = {}
     var onRevoke: () -> Void = {}
     var onReply: () -> Void = {}
+    var onQuoteTap: () -> Void = {}
+    
+    @State private var offset: CGFloat = 0
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 8) {
@@ -909,22 +966,25 @@ struct DribbbleMessageRow: View {
             
             VStack(alignment: isMe ? .trailing : .leading, spacing: 4) {
                 if message.replyToId != nil {
-                    HStack(spacing: 4) {
-                        Rectangle().fill(Color(hex: "D1D1FF")).frame(width: 2)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Replied Message")
-                                .font(.system(size: 8, weight: .bold))
-                                .foregroundColor(.gray)
-                            Text(repliedContent ?? "Original message...")
-                                .font(.system(size: 10))
-                                .foregroundColor(.gray.opacity(0.8))
-                                .lineLimit(1)
+                    Button(action: onQuoteTap) {
+                        HStack(spacing: 4) {
+                            Rectangle().fill(Color.slateBlue).frame(width: 2)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Replying to")
+                                    .font(.system(size: 9, weight: .bold))
+                                    .foregroundColor(.gray)
+                                Text(repliedContent ?? "Original message...")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.gray.opacity(0.8))
+                                    .lineLimit(1)
+                            }
                         }
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(Color.slateBlue.opacity(0.05))
+                        .cornerRadius(6)
                     }
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.gray.opacity(0.05))
-                    .cornerRadius(4)
+                    .buttonStyle(PlainButtonStyle())
                 }
                 
                 // Image Content
@@ -992,10 +1052,73 @@ struct DribbbleMessageRow: View {
                     .padding(.horizontal, 4)
                 }
                 
+                } else if message.mediaType == "AUDIO" {
+                    let audioUrl = resolveMediaURL(message.mediaUrl)?.absoluteString ?? ""
+                    let isPlayingThis = audioManager.isPlaying(url: audioUrl)
+                    let isPlaceholder = message.content == "[Uploading Audio...]"
+                    
+                    HStack(spacing: 12) {
+                        Button(action: {
+                            if !isPlaceholder {
+                                if isPlayingThis { audioManager.stopAudio() }
+                                else { audioManager.playAudio(urlString: audioUrl) }
+                            }
+                        }) {
+                            if isPlaceholder {
+                                ProgressView().progressViewStyle(CircularProgressViewStyle(tint: isMe ? .white : .gray))
+                                    .frame(width: 40, height: 40)
+                                    .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
+                                    .clipShape(Circle())
+                            } else {
+                                Image(systemName: isPlayingThis ? "pause.fill" : "play.fill")
+                                    .foregroundColor(isMe ? .white : Color.softSage)
+                                    .font(.system(size: 20))
+                                    .frame(width: 40, height: 40)
+                                    .background(isMe ? Color.white.opacity(0.3) : Color.softSage.opacity(0.1))
+                                    .clipShape(Circle())
+                                    .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
+                            }
+                        }
+                        
+                        GeometryReader { geo in
+                            ZStack(alignment: .leading) {
+                                Capsule()
+                                    .fill(isMe ? Color.white.opacity(0.3) : Color.gray.opacity(0.2))
+                                    .frame(height: 4)
+                                Capsule()
+                                    .fill(isMe ? Color.white : Color.softSage)
+                                    .frame(width: isPlayingThis ? geo.size.width * CGFloat(audioManager.progress) : 0, height: 4)
+                                    .animation(.linear(duration: 0.1), value: audioManager.progress)
+                            }
+                            .frame(height: 40) // For vertical centering inside HStack
+                        }
+                        .frame(width: 100)
+                        
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(formatTime(message.timestamp))
+                                .font(.system(size: 9))
+                                .foregroundColor(isMe ? .white.opacity(0.8) : .gray)
+                            if isMe && message.isDeleted != true {
+                                MessageStatusView(status: message.status ?? "SENT")
+                                    .colorInvert()
+                                    .brightness(isMe ? 1 : 0)
+                                    .scaleEffect(0.8)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 10).padding(.vertical, 8)
+                    .background(isMe ? Color.softSage : Color.white.opacity(0.6))
+                    .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
+                    .cornerRadius(25)
+                    .overlay(RoundedRectangle(cornerRadius: 25).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
+                    .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
+                }
+                
                 // Text Content
                 let showText = !message.content.isEmpty &&
                               message.content != "[Image]" &&
-                              message.content != "[Uploading Image...]"
+                              message.content != "[Uploading Image...]" &&
+                              message.mediaType != "AUDIO"
                 
                 if showText {
                     ZStack(alignment: .bottomTrailing) {
@@ -1022,9 +1145,11 @@ struct DribbbleMessageRow: View {
                         .padding(.bottom, 6)
                         .padding(.trailing, 10)
                     }
-                    .background(isMe ? Color(hex: "D1D1FF") : Color.white)
-                    .cornerRadius(18)
-                    .shadow(color: Color.black.opacity(0.04), radius: 3, x: 0, y: 1)
+                    .background(isMe ? Color.softSage : Color.white.opacity(0.6))
+                    .background(isMe ? AnyShapeStyle(Color.clear) : AnyShapeStyle(.ultraThinMaterial))
+                    .cornerRadius(20)
+                    .overlay(RoundedRectangle(cornerRadius: 20).stroke(isMe ? Color.clear : Color.glassBorder, lineWidth: 1))
+                    .shadow(color: Color.black.opacity(isMe ? 0.05 : 0.02), radius: 4, x: 0, y: 2)
                 }
             }
             .contextMenu {
@@ -1049,6 +1174,28 @@ struct DribbbleMessageRow: View {
                 Spacer(minLength: 40)
             }
         }
+        .offset(x: offset)
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    let translation = value.translation.width
+                    if isMe && translation < 0 {
+                        offset = max(translation, -60)
+                    } else if !isMe && translation > 0 {
+                        offset = min(translation, 60)
+                    }
+                }
+                .onEnded { value in
+                    if abs(offset) >= 50 {
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
+                        generator.impactOccurred()
+                        onReply()
+                    }
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        offset = 0
+                    }
+                }
+        )
     }
     
     private func formatTime(_ timestamp: Double?) -> String {
@@ -1099,31 +1246,37 @@ struct AuthView: View {
     
     var body: some View {
         ZStack {
-            Color(hex: "F4F4F4").ignoresSafeArea()
+            LinearGradient(
+                gradient: Gradient(colors: [Color.softBackground, Color.slateBlue.opacity(0.15)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
             
             VStack(spacing: 20) {
                 VStack(spacing: 8) {
-                    Image(systemName: "paperplane.circle.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(Color(hex: "D1D1FF"))
-                    Text("ChatUI")
-                        .font(.system(size: 26, weight: .bold, design: .rounded))
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 50))
+                        .foregroundColor(Color.charcoal.opacity(0.7))
+                    Text("Enterprise")
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .foregroundColor(Color.charcoal)
                 }
                 .padding(.top, 20)
                 
-                VStack(spacing: 15) {
+                VStack(spacing: 20) {
                     HStack {
                         Button("Login") { isLoginMode = true }
-                            .foregroundColor(isLoginMode ? .black : .gray)
+                            .foregroundColor(isLoginMode ? Color.charcoal : .gray)
                             .font(.system(size: 15, weight: .bold))
                         Spacer()
                         Button("Register") { isLoginMode = false }
-                            .foregroundColor(!isLoginMode ? .black : .gray)
+                            .foregroundColor(!isLoginMode ? Color.charcoal : .gray)
                             .font(.system(size: 15, weight: .bold))
                     }
                     .padding(.horizontal, 30)
                     
-                    VStack(spacing: 10) {
+                    VStack(spacing: 12) {
                         ModernTextField(placeholder: "Username", text: $username, autoCap: .none)
                         if !isLoginMode {
                             ModernTextField(placeholder: "Email", text: $email, autoCap: .none)
@@ -1132,7 +1285,7 @@ struct AuthView: View {
                         }
                         ModernTextField(placeholder: "Password", text: $password, isSecure: true)
                     }
-                    .padding(.horizontal, 15)
+                    .padding(.horizontal, 20)
                     
                     if let error = errorMessage {
                         Text(error).foregroundColor(.red).font(.system(size: 11)).padding(.horizontal)
@@ -1140,20 +1293,22 @@ struct AuthView: View {
                     
                     Button(action: handleAction) {
                         if isLoading { ProgressView().tint(.white) }
-                        else { Text(isLoginMode ? "Sign In" : "Sign Up").font(.system(size: 15, weight: .bold)) }
+                        else { Text(isLoginMode ? "Sign In" : "Sign Up").font(.system(size: 16, weight: .bold)) }
                     }
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Color(hex: "D1D1FF"))
+                    .padding(.vertical, 14)
+                    .background(Color.softSage)
                     .foregroundColor(.white)
-                    .cornerRadius(18)
+                    .cornerRadius(25)
                     .padding(.horizontal, 20)
-                    .shadow(color: Color(hex: "D1D1FF").opacity(0.4), radius: 6, x: 0, y: 3)
+                    .shadow(color: Color.softSage.opacity(0.4), radius: 8, x: 0, y: 4)
                 }
-                .padding(.vertical, 20)
-                .background(Color.white)
-                .cornerRadius(30)
-                .padding(.horizontal)
+                .padding(.vertical, 30)
+                .background(.ultraThinMaterial)
+                .cornerRadius(35)
+                .overlay(RoundedRectangle(cornerRadius: 35).stroke(Color.glassBorder, lineWidth: 1))
+                .shadow(color: Color.black.opacity(0.05), radius: 25, x: 0, y: 10)
+                .padding(.horizontal, 20)
                 
                 Spacer()
             }
@@ -1263,13 +1418,20 @@ struct ModernTextField: View {
             }
         }
         .font(.system(size: 14))
-        .padding(12)
-        .background(Color(hex: "F4F4F4"))
-        .cornerRadius(12)
+        .padding(14)
+        .background(Color.white.opacity(0.6))
+        .cornerRadius(25)
+        .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.glassBorder, lineWidth: 1))
     }
 }
 
 extension Color {
+    static let softBackground = Color(hex: "F7F8FA")
+    static let softSage = Color(hex: "A3B19B")
+    static let slateBlue = Color(hex: "A9B5C2")
+    static let charcoal = Color(hex: "2F3E46")
+    static let glassBorder = Color.white.opacity(0.5)
+
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0

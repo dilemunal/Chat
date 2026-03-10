@@ -139,4 +139,34 @@ class ChatViewModel: ObservableObject {
             }
         }
     }
+    
+    func uploadAndSendAudio(chatId: String, senderId: String, audioUrl: URL, replyToId: String? = nil) {
+        let tempId = UUID().uuidString
+        var localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "[Uploading Audio...]", replyToId: replyToId, mediaType: "AUDIO")
+        localMsg.id = tempId
+        localMsg.localId = tempId
+        localMsg.timestamp = Date().timeIntervalSince1970 * 1000
+        
+        DispatchQueue.main.async {
+            self.messages.append(localMsg)
+        }
+        
+        guard let data = try? Data(contentsOf: audioUrl) else { return }
+        APIClient.shared.uploadMedia(data: data, fileName: "\(tempId).m4a", contentType: "audio/m4a") { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let url):
+                    self?.messages.removeAll(where: { $0.id == tempId })
+                    
+                    var finalMsg = ChatMessage(chatId: chatId, senderId: senderId, content: "Voice Note", replyToId: replyToId, mediaUrl: url, mediaType: "AUDIO")
+                    finalMsg.localId = tempId
+                    finalMsg.timestamp = Date().timeIntervalSince1970 * 1000
+                    WebSocketManager.shared.sendMessage(message: finalMsg)
+                case .failure(let error):
+                    print("❌ Audio upload failed: \(error.localizedDescription)")
+                    self?.messages.removeAll(where: { $0.id == tempId })
+                }
+            }
+        }
+    }
 }
