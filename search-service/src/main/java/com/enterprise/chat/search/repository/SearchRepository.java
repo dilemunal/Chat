@@ -10,4 +10,5 @@ import java.util.List;
 public interface SearchRepository extends ElasticsearchRepository<IndexedMessage, String> {
     List<IndexedMessage> findByChatIdAndContentContaining(String chatId, String content);
     List<IndexedMessage> findByContentContaining(String content);
+    List<IndexedMessage> findByContentContainingAndChatIdIn(String content, List<String> chatIds);
 }

@@ -138,21 +138,48 @@ class APIClient {
         }.resume()
     }
 
-    func searchMessages(query: String, completion: @escaping (Result<[ChatMessage], Error>) -> Void) {
+    func searchMessages(query: String, chatIds: [String], completion: @escaping (Result<[ChatMessage], Error>) -> Void) {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        guard let url = URL(string: "\(baseURL)/search/global?keyword=\(encodedQuery)") else { return }
         
+        // Build URL with multiple chatIds parameters
+        var urlString = "\(baseURL)/search/global?keyword=\(encodedQuery)"
+        for id in chatIds {
+            urlString += "&chatIds=\(id)"
+        }
+        
+        guard let url = URL(string: urlString) else { return }
+        
+        print("🔍 Searching messages: \(url.absoluteString)")
         var request = URLRequest(url: url)
         if let token = accessToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error { return completion(.failure(error)) }
-            guard let data = data, let results = try? JSONDecoder().decode([ChatMessage].self, from: data) else {
-                return completion(.failure(NSError(domain: "Search", code: 500, userInfo: [NSLocalizedDescriptionKey: "Arama sonuçları alınamadı."])))
+            if let error = error {
+                print("❌ Search messages error: \(error.localizedDescription)")
+                return completion(.failure(error))
             }
-            completion(.success(results))
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📡 Search messages response status: \(httpResponse.statusCode)")
+            }
+
+            guard let data = data else {
+                return completion(.failure(NSError(domain: "Search", code: 500, userInfo: [NSLocalizedDescriptionKey: "No data"])))
+            }
+            
+            do {
+                let messages = try JSONDecoder().decode([ChatMessage].self, from: data)
+                print("✅ Found \(messages.count) messages in scoped search")
+                completion(.success(messages))
+            } catch {
+                print("❌ Search messages decoding error: \(error)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("📄 Raw search response: \(raw)")
+                }
+                completion(.failure(error))
+            }
         }.resume()
     }
 
@@ -160,17 +187,37 @@ class APIClient {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         guard let url = URL(string: "\(baseURL)/rooms/search?username=\(username)&query=\(encodedQuery)") else { return }
         
+        print("🔍 Searching rooms: \(url.absoluteString)")
         var request = URLRequest(url: url)
         if let token = accessToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error { return completion(.failure(error)) }
-            guard let data = data, let results = try? JSONDecoder().decode([ChatRoom].self, from: data) else {
-                return completion(.failure(NSError(domain: "Search", code: 500, userInfo: [NSLocalizedDescriptionKey: "Sohbet arama sonuçları alınamadı."])))
+            if let error = error {
+                print("❌ Search rooms error: \(error.localizedDescription)")
+                return completion(.failure(error))
             }
-            completion(.success(results))
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("📡 Search rooms response status: \(httpResponse.statusCode)")
+            }
+
+            guard let data = data else {
+                return completion(.failure(NSError(domain: "Search", code: 500, userInfo: [NSLocalizedDescriptionKey: "No data"])))
+            }
+            
+            do {
+                let rooms = try JSONDecoder().decode([ChatRoom].self, from: data)
+                print("✅ Found \(rooms.count) rooms")
+                completion(.success(rooms))
+            } catch {
+                print("❌ Search rooms decoding error: \(error)")
+                if let raw = String(data: data, encoding: .utf8) {
+                    print("📄 Raw rooms response: \(raw)")
+                }
+                completion(.failure(error))
+            }
         }.resume()
     }
 

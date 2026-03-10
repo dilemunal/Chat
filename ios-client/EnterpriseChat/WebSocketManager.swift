@@ -111,6 +111,7 @@ class WebSocketManager: ObservableObject {
                         } else {
                             if let chatMsg = try? JSONDecoder().decode(ChatMessage.self, from: data) {
                                 self.receivedMessage = chatMsg
+                                NotificationCenter.default.post(name: NSNotification.Name("NewMessageReceived"), object: chatMsg)
                             }
                         }
                     }
