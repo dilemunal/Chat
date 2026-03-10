@@ -19,10 +19,24 @@ public class ChatRoomController {
 
     @PostMapping
     public ResponseEntity<ChatRoom> createRoom(@RequestBody ChatRoom room) {
-        if (room.getId() == null) {
-            room.setId(UUID.randomUUID().toString());
+        if (room.isGroup()) {
+            if (room.getId() == null) {
+                room.setId("group_" + UUID.randomUUID().toString());
+            }
+        } else {
+            // For DMs, create a consistent ID based on participants
+            if (room.getMembers() != null && room.getMembers().size() == 2) {
+                List<String> sortedMembers = room.getMembers().stream().sorted().toList();
+                room.setId("dm_" + String.join("_", sortedMembers));
+            } else if (room.getId() == null) {
+                room.setId("dm_" + UUID.randomUUID().toString());
+            }
         }
-        room.setCreatedAt(Instant.now());
+        
+        if (room.getCreatedAt() == null) {
+            room.setCreatedAt(Instant.now());
+        }
+        
         return ResponseEntity.ok(chatRoomRepository.save(room));
     }
 

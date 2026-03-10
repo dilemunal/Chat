@@ -33,5 +33,5 @@ struct ChatRoom: Codable, Identifiable, Hashable {
     let name: String?
     let group: Bool
     let members: Set<String>
-    let createdAt: Double?
+    let createdAt: String?
 }

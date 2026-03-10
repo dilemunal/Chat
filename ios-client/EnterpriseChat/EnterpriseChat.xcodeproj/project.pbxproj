@@ -28,22 +28,22 @@
 
 /* Begin PBXFileReference section */
 		37F2BC12C6E3E96E1C6CD1A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		399C24821FFA6B82DC5FD7AF /* EnterpriseChat.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EnterpriseChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		536C7A85E4BC41E0F43F2D91 /* build_final_error_3.log */ = {isa = PBXFileReference; path = build_final_error_3.log; sourceTree = "<group>"; };
+		399C24821FFA6B82DC5FD7AF /* EnterpriseChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EnterpriseChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		536C7A85E4BC41E0F43F2D91 /* build_final_error_3.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_final_error_3.log; sourceTree = "<group>"; };
 		541D0983FA77325461BDF544 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		5C534E3FDFF7977A4C73D6F7 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		712CC85B28D4EB87219EF7EE /* build_err.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_err.txt; sourceTree = "<group>"; };
 		7D55822A04FE605D8493B5D9 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
-		7E8AB3BEB2B35B620A0D3D75 /* build_final_error.log */ = {isa = PBXFileReference; path = build_final_error.log; sourceTree = "<group>"; };
-		8443432B97E7CB376E0B7093 /* build_final_debug.log */ = {isa = PBXFileReference; path = build_final_debug.log; sourceTree = "<group>"; };
+		7E8AB3BEB2B35B620A0D3D75 /* build_final_error.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_final_error.log; sourceTree = "<group>"; };
+		8443432B97E7CB376E0B7093 /* build_final_debug.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_final_debug.log; sourceTree = "<group>"; };
 		85CD11A874EA86D32D2E97D5 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		9DFD556A60AE87010FB32B58 /* EnterpriseChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = EnterpriseChat.xcodeproj; sourceTree = "<group>"; };
-		A8AD4DCCE1BD77BE3C959370 /* build_debug_2.log */ = {isa = PBXFileReference; path = build_debug_2.log; sourceTree = "<group>"; };
-		B243D570D2E8F77EAFAE4176 /* Package.resolved */ = {isa = PBXFileReference; path = Package.resolved; sourceTree = "<group>"; };
+		A8AD4DCCE1BD77BE3C959370 /* build_debug_2.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_debug_2.log; sourceTree = "<group>"; };
+		B243D570D2E8F77EAFAE4176 /* Package.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Package.resolved; sourceTree = "<group>"; };
 		C8007B52920E4DD8F447625B /* EnterpriseChat 2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = "EnterpriseChat 2.xcodeproj"; sourceTree = "<group>"; };
 		EAAE2E8B740BF51CF5AF2A7F /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		F0933CDB655E25AFA73F0D11 /* build_log.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_log.txt; sourceTree = "<group>"; };
-		FF22418D44F9773FBBDDFD33 /* build_debug.log */ = {isa = PBXFileReference; path = build_debug.log; sourceTree = "<group>"; };
+		FF22418D44F9773FBBDDFD33 /* build_debug.log */ = {isa = PBXFileReference; lastKnownFileType = text; path = build_debug.log; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +64,18 @@
 				A20203F6739BAA320401C25E /* EnterpriseChat */,
 				D41F0BA2A5EF9911BE66026B /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		8CFC6FC82F604D2000F33BB7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8CFC6FCA2F604D2000F33BB7 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		A20203F6739BAA320401C25E /* EnterpriseChat */ = {
@@ -129,8 +141,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 41BC201EC2CDD83AEC2C7133 /* Build configuration list for PBXProject "EnterpriseChat" */;
 			developmentRegion = en;
@@ -147,6 +157,16 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D41F0BA2A5EF9911BE66026B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 8CFC6FC82F604D2000F33BB7 /* Products */;
+					ProjectRef = C8007B52920E4DD8F447625B /* EnterpriseChat 2.xcodeproj */;
+				},
+				{
+					ProductGroup = 8CFC6FCA2F604D2000F33BB7 /* Products */;
+					ProjectRef = 9DFD556A60AE87010FB32B58 /* EnterpriseChat.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				52C1CBAE6FA038855756575B /* EnterpriseChat */,
@@ -258,6 +278,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = .build/checkouts/Starscream/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -265,6 +287,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.enterprise.EnterpriseChat;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -275,6 +298,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = .build/checkouts/Starscream/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -282,6 +307,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.enterprise.EnterpriseChat;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

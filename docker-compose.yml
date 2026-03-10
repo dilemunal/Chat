@@ -90,6 +90,8 @@ services:
       KC_DB_PASSWORD: chatpassword
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
     command: start-dev
     ports:
       - "8080:8080"
