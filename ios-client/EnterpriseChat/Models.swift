@@ -1,7 +1,7 @@
 import Foundation
 
 struct ChatMessage: Codable, Identifiable, Hashable {
-    var id: String { messageId ?? UUID().uuidString }
+    var id = UUID().uuidString
     var chatId: String
     var messageId: String?
     var senderId: String
@@ -17,6 +17,12 @@ struct ChatMessage: Codable, Identifiable, Hashable {
     // Phase 6: Media Support
     var mediaUrl: String?
     var mediaType: String? // IMAGE, VIDEO, FILE, VOICE
+    
+    enum CodingKeys: String, CodingKey {
+        case chatId, messageId, senderId, content, timestamp
+        case status, isEdited, isDeleted, replyToId
+        case mediaUrl, mediaType
+    }
 }
 
 struct User: Codable, Identifiable, Hashable {

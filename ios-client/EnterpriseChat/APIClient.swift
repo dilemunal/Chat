@@ -120,12 +120,21 @@ class APIClient {
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data,
-                  let messages = try? JSONDecoder().decode([ChatMessage].self, from: data) else {
-                return completion([])
+            if let data = data {
+                do {
+                    let messages = try JSONDecoder().decode([ChatMessage].self, from: data)
+                    let sorted = messages.sorted { ($0.timestamp ?? 0) < ($1.timestamp ?? 0) }
+                    completion(sorted)
+                } catch {
+                    print("Decoding Error in fetchMessages: \(error)")
+                    if let raw = String(data: data, encoding: .utf8) {
+                        print("Raw data that failed decoding: \(raw)")
+                    }
+                    completion([])
+                }
+            } else {
+                completion([])
             }
-            let sorted = messages.sorted { ($0.timestamp ?? 0) < ($1.timestamp ?? 0) }
-            completion(sorted)
         }.resume()
     }
 

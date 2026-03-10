@@ -31,8 +31,15 @@ class ChatViewModel: ObservableObject {
             .filter { $0.chatId == chatId }
             .receive(on: RunLoop.main)
             .sink { [weak self] newMsg in
-                if !(self?.messages.contains(where: { $0.id == newMsg.id }) ?? false) {
-                    self?.messages.append(newMsg)
+                guard let self = self else { return }
+                // Try to find if this message is a server-confirmation of a local one
+                if let index = self.messages.firstIndex(where: {
+                    ($0.messageId == newMsg.messageId) ||
+                    ($0.messageId == nil && $0.content == newMsg.content && $0.senderId == newMsg.senderId)
+                }) {
+                    self.messages[index] = newMsg
+                } else {
+                    self.messages.append(newMsg)
                 }
             }
             .store(in: &cancellables)
