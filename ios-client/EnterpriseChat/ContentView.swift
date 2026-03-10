@@ -782,7 +782,8 @@ struct ChatRoomView: View {
                         editingMessageId = nil
                         viewModel.inputText = ""
                     } else {
-                        WebSocketManager.shared.sendMessage(chatId: chatId, senderId: currentUser.username, content: viewModel.inputText)
+                        viewModel.sendMessage(chatId: chatId, senderId: currentUser.username, replyToId: replyingToId)
+                        replyingToId = nil
                     }
                 }) {
                     Image(systemName: editingMessageId != nil ? "pencil.circle.fill" : "paperplane.fill")

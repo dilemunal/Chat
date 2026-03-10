@@ -53,16 +53,17 @@ class ChatViewModel: ObservableObject {
     }
     
     func sendMessage(chatId: String, senderId: String, replyToId: String? = nil) {
-        guard !inputText.isEmpty else { return }
-        let content = inputText
-        inputText = ""
+        let content = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !content.isEmpty else { return }
         
-        // Local append for instant sync
-        let localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content)
-        if !messages.contains(where: { $0.id == localMsg.id }) {
-            messages.append(localMsg)
-        }
+        // Optimistic UI Update
+        let localMsg = ChatMessage(chatId: chatId, senderId: senderId, content: content, replyToId: replyToId)
+        self.messages.append(localMsg)
         
+        // Clear input
+        self.inputText = ""
+        
+        // Real Send
         WebSocketManager.shared.sendMessage(chatId: chatId, senderId: senderId, content: content)
     }
     
