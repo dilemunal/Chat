@@ -1,0 +1,22 @@
+name: EnterpriseChat
+options:
+  bundleIdPrefix: com.enterprise
+targets:
+  EnterpriseChat:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: .
+        excludes:
+          - .build
+          - build
+          - .git
+          - Package.swift
+          - project.yml
+    dependencies:
+      - package: Starscream
+packages:
+  Starscream:
+    url: https://github.com/daltoniam/Starscream.git
+    from: 4.0.0

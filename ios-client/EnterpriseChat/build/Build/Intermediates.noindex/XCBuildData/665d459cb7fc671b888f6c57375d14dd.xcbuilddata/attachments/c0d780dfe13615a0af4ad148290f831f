@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/EnterpriseChat-primary.dia",
+    "emit-module-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/EnterpriseChat-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/EnterpriseChat-primary-emit-module.dia",
+    "pch" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/EnterpriseChat-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/EnterpriseChat-primary.swiftdeps"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/APIClient.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/APIClient~partial.swiftmodule"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/App.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/App~partial.swiftmodule"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/ChatViewModel.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ChatViewModel~partial.swiftmodule"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/ContentView.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/Models.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/Models~partial.swiftmodule"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/WebSocketManager.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.dia",
+    "index-unit-output-path" : "/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.o",
+    "llvm-bc" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.bc",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager.swiftdeps",
+    "swiftmodule" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/EnterpriseChat.build/Debug-iphonesimulator/EnterpriseChat.build/Objects-normal/arm64/WebSocketManager~partial.swiftmodule"
+  }
+}

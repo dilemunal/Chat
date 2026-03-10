@@ -1,0 +1,23 @@
+{
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/SourcePackages/checkouts/Starscream/Sources/Engine/WSEngine.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSEngine.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSEngine.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSEngine.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSEngine.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSEngine.swiftdeps"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/SourcePackages/checkouts/Starscream/Sources/Framer/FoundationHTTPHandler.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPHandler.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPHandler.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPHandler.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPHandler.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPHandler.swiftdeps"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/SourcePackages/checkouts/Starscream/Sources/Framer/FoundationHTTPServerHandler.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPServerHandler.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPServerHandler.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPServerHandler.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPServerHandler.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/FoundationHTTPServerHandler.swiftdeps"
+  }
+}

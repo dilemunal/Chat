@@ -1,0 +1,23 @@
+{
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/DerivedSources/resource_bundle_accessor.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/resource_bundle_accessor.swiftdeps"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/SourcePackages/checkouts/Starscream/Sources/Compression/Compression.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/Compression.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/Compression.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/Compression.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/Compression.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/Compression.swiftdeps"
+  },
+  "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/SourcePackages/checkouts/Starscream/Sources/Compression/WSCompression.swift" : {
+    "const-values" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSCompression.swiftconstvalues",
+    "dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSCompression.d",
+    "diagnostics" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSCompression.dia",
+    "object" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSCompression.o",
+    "swift-dependencies" : "/Users/dilemunal/Desktop/Chat/ios-client/EnterpriseChat/build/Build/Intermediates.noindex/Starscream.build/Debug-iphonesimulator/Starscream.build/Objects-normal/arm64/WSCompression.swiftdeps"
+  }
+}

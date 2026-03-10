@@ -1,0 +1,27 @@
+# Loglar ve Geçici Dosyalar
+*.log
+*.txt
+build_final.log
+build_log*.txt
+
+# Java / Maven (Tüm servisler için)
+**/target/
+target/
+.mvn/
+*.class
+
+# Node.js / Frontend
+**/node_modules/
+frontend/build/
+frontend/dist/
+
+# iOS / Swift
+**/ios-client/.build/
+**/DerivedData/
+*.xcuserstate
+ios-client/EnterpriseChat/.build/
+
+# Diğer
+.DS_Store
+.idea/
+.vscode/
