@@ -45,6 +45,11 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatRoomRepository.findByMembersContaining(username));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ChatRoom>> searchRooms(@RequestParam String username, @RequestParam String query) {
+        return ResponseEntity.ok(chatRoomRepository.searchRooms(username, query));
+    }
+
     @DeleteMapping("/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable String roomId) {
         chatRoomRepository.deleteById(roomId);

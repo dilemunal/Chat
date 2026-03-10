@@ -433,11 +433,16 @@ struct ContactRowView: View {
 struct SearchView: View {
     let currentUser: User
     @State private var query = ""
-    @State private var results: [ChatMessage] = []
+    @State private var chatResults: [ChatRoom] = []
+    @State private var messageResults: [ChatMessage] = []
     @State private var isLoading = false
     @State private var selectedChatId = ""
     @State private var navigateToChat = false
+    @State private var selectedRoomName = "Chat" // To pass to ChatRoomView
     
+    // Debounce support using Swift Concurrency Task
+    @State private var searchTask: Task<Void, Never>? = nil
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -454,8 +459,18 @@ struct SearchView: View {
 
                     HStack {
                         Image(systemName: "magnifyingglass").foregroundColor(.gray).font(.system(size: 14))
-                        TextField("Search message content...", text: $query, onCommit: performSearch)
+                        TextField("Search chats and messages...", text: $query)
                             .font(.system(size: 14))
+                            .onChange(of: query) { newValue in
+                                // Debounce: cancel previous task and start new one
+                                searchTask?.cancel()
+                                searchTask = Task {
+                                    try? await Task.sleep(nanoseconds: 500_000_000) // 500ms
+                                    if !Task.isCancelled {
+                                        await performSearch()
+                                    }
+                                }
+                            }
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 14)
@@ -467,61 +482,124 @@ struct SearchView: View {
                         ProgressView().padding()
                     }
 
-                    if results.isEmpty && !query.isEmpty && !isLoading {
+                    if !query.isEmpty && !isLoading && chatResults.isEmpty && messageResults.isEmpty {
                         Text("No results found").foregroundColor(.gray).padding()
                     }
 
-                    ScrollView {
-                        LazyVStack(spacing: 12) {
-                            ForEach(results) { msg in
-                                Button(action: {
-                                    self.selectedChatId = msg.chatId
-                                    self.navigateToChat = true
-                                }) {
-                                    VStack(alignment: .leading, spacing: 8) {
+                    List {
+                        if !chatResults.isEmpty {
+                            Section("Chats") {
+                                ForEach(chatResults) { room in
+                                    Button(action: {
+                                        self.selectedChatId = room.id
+                                        self.selectedRoomName = room.name ?? "Chat"
+                                        self.navigateToChat = true
+                                    }) {
                                         HStack {
-                                            Text(msg.senderId)
-                                                .font(.system(size: 12, weight: .bold))
-                                                .foregroundColor(Color(hex: "4A4A8F"))
-                                            Spacer()
-                                            Text("Chat ID: \(msg.chatId)")
-                                                .font(.system(size: 9))
-                                                .foregroundColor(.gray)
+                                            Circle()
+                                                .fill(Color(hex: "D1D1FF"))
+                                                .frame(width: 40, height: 40)
+                                                .overlay(Text(String((room.name ?? "C").prefix(1)).uppercased()).foregroundColor(.white).font(.system(size: 14, weight: .bold)))
+                                            
+                                            VStack(alignment: .leading, spacing: 4) {
+                                                Text(room.name ?? "Chat")
+                                                    .font(.system(size: 15, weight: .semibold))
+                                                    .foregroundColor(.black)
+                                                Text(room.group ? "Group" : "1-on-1 Chat")
+                                                    .font(.system(size: 12))
+                                                    .foregroundColor(.gray)
+                                            }
                                         }
-                                        Text(msg.content)
-                                            .font(.system(size: 14, design: .rounded))
-                                            .foregroundColor(.black)
-                                            .multilineTextAlignment(.leading)
+                                        .padding(.vertical, 4)
                                     }
-                                    .padding(12)
-                                    .background(Color.white)
-                                    .cornerRadius(16)
-                                    .padding(.horizontal)
+                                }
+                            }
+                        }
+                        
+                        if !messageResults.isEmpty {
+                            Section("Messages") {
+                                ForEach(messageResults) { msg in
+                                    Button(action: {
+                                        self.selectedChatId = msg.chatId
+                                        self.selectedRoomName = "Chat" // Fetching dynamically is harder, using placeholder
+                                        self.navigateToChat = true
+                                    }) {
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            HStack {
+                                                Text(msg.senderId)
+                                                    .font(.system(size: 13, weight: .bold))
+                                                    .foregroundColor(Color(hex: "4A4A8F"))
+                                                Spacer()
+                                                Text(formatDate(msg.timestamp))
+                                                    .font(.system(size: 11))
+                                                    .foregroundColor(.gray)
+                                            }
+                                            Text(msg.content)
+                                                .font(.system(size: 14))
+                                                .foregroundColor(.black)
+                                                .lineLimit(2)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        .padding(.vertical, 4)
+                                    }
                                 }
                             }
                         }
                     }
+                    .listStyle(.insetGrouped)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
                 } // End VStack
             } // End ZStack
             .navigationDestination(isPresented: $navigateToChat) {
-                ChatRoomView(currentUser: currentUser, chatId: selectedChatId, title: "Chat")
+                ChatRoomView(currentUser: currentUser, chatId: selectedChatId, title: selectedRoomName)
             }
             .navigationBarHidden(true)
         } // End NavigationStack
-
     }
     
-    private func performSearch() {
-        guard !query.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        isLoading = true
-        APIClient.shared.searchMessages(query: query) { result in
-            DispatchQueue.main.async {
-                isLoading = false
-                if case .success(let fetched) = result {
-                    self.results = fetched
-                }
-            }
+    @MainActor
+    private func performSearch() async {
+        let trimmed = query.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else {
+            self.chatResults = []
+            self.messageResults = []
+            return
         }
+        
+        self.isLoading = true
+        
+        // Use a DispatchGroup to coordinate the two requests
+        let group = DispatchGroup()
+        
+        group.enter()
+        APIClient.shared.searchRooms(username: currentUser.username, query: trimmed) { result in
+            if case .success(let rooms) = result {
+                DispatchQueue.main.async { self.chatResults = rooms }
+            }
+            group.leave()
+        }
+        
+        group.enter()
+        APIClient.shared.searchMessages(query: trimmed) { result in
+            if case .success(let msgs) = result {
+                DispatchQueue.main.async { self.messageResults = msgs }
+            }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            self.isLoading = false
+        }
+    }
+    
+    private func formatDate(_ timestamp: Double?) -> String {
+        guard let ts = timestamp else { return "Unknown date" }
+        let date = Date(timeIntervalSince1970: ts / 1000.0)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
 }
 

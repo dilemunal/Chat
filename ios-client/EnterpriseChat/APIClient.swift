@@ -156,6 +156,24 @@ class APIClient {
         }.resume()
     }
 
+    func searchRooms(username: String, query: String, completion: @escaping (Result<[ChatRoom], Error>) -> Void) {
+        let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        guard let url = URL(string: "\(baseURL)/rooms/search?username=\(username)&query=\(encodedQuery)") else { return }
+        
+        var request = URLRequest(url: url)
+        if let token = accessToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error { return completion(.failure(error)) }
+            guard let data = data, let results = try? JSONDecoder().decode([ChatRoom].self, from: data) else {
+                return completion(.failure(NSError(domain: "Search", code: 500, userInfo: [NSLocalizedDescriptionKey: "Sohbet arama sonuçları alınamadı."])))
+            }
+            completion(.success(results))
+        }.resume()
+    }
+
     func fetchRooms(username: String, completion: @escaping (Result<[ChatRoom], Error>) -> Void) {
         guard let url = URL(string: "\(baseURL)/rooms/user/\(username)") else { return }
         var request = URLRequest(url: url)
@@ -362,5 +380,6 @@ extension CharacterSet {
         return allowed
     }()
 }
+
 
 

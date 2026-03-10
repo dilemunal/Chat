@@ -20,23 +20,35 @@ public class MessageIndexerService {
 
     @KafkaListener(topics = "chat-messages", groupId = "search-indexer-group")
     public void consumeMessage(String messagePayload) {
+        log.debug("Received raw message payload: {}", messagePayload);
         try {
-            // In a real scenario, this matches the ChatMessage / Message DTO published by MessageService or WebSocketService.
             Map<String, Object> payload = objectMapper.readValue(messagePayload, Map.class);
             
+            String msgId = payload.getOrDefault("messageId", "").toString();
+            if (msgId.isEmpty()) {
+                msgId = java.util.UUID.randomUUID().toString();
+            }
+
+            Object tsObj = payload.get("timestamp");
+            long timestamp = 0;
+            if (tsObj instanceof Number) {
+                timestamp = ((Number) tsObj).longValue();
+            } else if (tsObj != null) {
+                timestamp = Long.parseLong(tsObj.toString());
+            }
+
             IndexedMessage indexedMessage = IndexedMessage.builder()
-                    .messageId(payload.getOrDefault("messageId", "").toString())
+                    .messageId(msgId)
                     .chatId(payload.getOrDefault("chatId", "").toString())
                     .senderId(payload.getOrDefault("senderId", "").toString())
                     .content(payload.getOrDefault("content", "").toString())
-                    // Assuming timestamp is passed as long/epoch millis
-                    .timestamp(Long.parseLong(payload.getOrDefault("timestamp", "0").toString()))
+                    .timestamp(timestamp)
                     .build();
 
             searchRepository.save(indexedMessage);
-            log.debug("Indexed message: {}", indexedMessage.getMessageId());
+            log.info("Successfully indexed message {} from chat {}", indexedMessage.getMessageId(), indexedMessage.getChatId());
         } catch (Exception e) {
-            log.error("Failed to index message", e);
+            log.error("Failed to index message. Payload: {}", messagePayload, e);
         }
     }
 }
